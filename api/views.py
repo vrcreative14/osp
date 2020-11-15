@@ -37,7 +37,6 @@ class UserViewSet(viewsets.ModelViewSet):
 
 
 
-
 def validate_phone_otp(phone, usr_first_name):        
         user = User.objects.filter(phone = phone)
         if user.exists():
