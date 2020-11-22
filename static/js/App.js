@@ -1,24 +1,4 @@
 
-
-function getCookie(name) {
-    let cookieValue = null;
-    if (document.cookie && document.cookie !== '') {
-        const cookies = document.cookie.split(';');
-        for (let i = 0; i < cookies.length; i++) {
-            const cookie = cookies[i].trim();
-            //Does this cookie string begin with the name we want?
-            if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                break;
-            }
-        }
-    }
-    return cookieValue;
-}
-
-//const csrftoken=getCookie('csrftoken');
-
-
 var x = document.getElementById("demo");
 function getLocation() {
   if (navigator.geolocation) {
@@ -39,8 +19,7 @@ function showPosition(position) {
 function fetchLocationName(position){
     fetch('http://apis.mapmyindia.com/advancedmaps/v1/99gsfvaspt7kg4nz13g3hg1bvsvkx48j/rev_geocode?lat=position.coords.latitude&lng=position.coords.longitude',{
         method:'GET',
-        headers:{
-            
+        headers:{            
             'X-CSRFToken':csrftoken,
         },
     })
@@ -56,7 +35,7 @@ function openNav() {
 
 /* Set the width of the side navigation to 0 */
 function closeNav() {
-document.getElementById("mySidenav").style.width = "0";
+    document.getElementById("mySidenav").style.width = "0";
 }
 //fetchStores();
 //getLocation();
@@ -153,6 +132,24 @@ function autoSlide(n){
 }
 
 
+
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            //Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+const csrftoken=getCookie('csrftoken');
 
 
 

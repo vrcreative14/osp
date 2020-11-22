@@ -1,0 +1,35 @@
+
+ <div class="navbar">
+     
+    <!-- <input id="demo" placeholder="" /> <i></i> -->
+    <style>
+      .transparentIcon{
+        background-color: transparent!Important;
+      }
+
+      i.icon{
+        display: inline!Important;
+      }
+    </style>
+    <a class="" href="./login">
+      <i class="user icon transparentIcon"></i>{{Profile}}</a>
+
+      {% if not logggedin %}
+      <a href="../SignUp">      
+     
+      <i class="user plus icon transparentIcon">
+       
+      </i>Login/SignUp
+    </a>
+      {% endif %}
+
+    <a href="#">Shop Now</a>
+   
+    <a style="background-image: url('{{ baseUrl }}/cart.png')" class="imgClick">
+      <i class="shopping cart icon transparentIcon"></i>
+      Cart
+    </a>   
+
+    
+    
+  </div>

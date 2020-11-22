@@ -7,11 +7,12 @@
 <head>
 
   <meta charset="UTF-8">
-  <title>
-    Orig
-  </title>
+  
+  <title>{% block  title %} {% endblock %}</title>
+
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
   <link rel="stylesheet" type="text/css" href="{%static 'css/App.css'%}">
+  <link rel="stylesheet" type="text/css" href="{%static 'css/Signup.css'%}">
   <link href='https://fonts.googleapis.com/css?family=Barlow' rel='stylesheet'>
   <link href='https://fonts.googleapis.com/css?family=Belgrano' rel='stylesheet'>
 
@@ -26,8 +27,8 @@
     </div>
     <div>
       <img />
-      <label style="align-self:flex-start">Shopping Highways...</label> <br />
-      <label>Connecting us with the local shops..</label>
+      <label style="align-self:flex-start">Vcnity...</label> <br />
+      <label>Visit your favourite shops in the city online</label>
     </div>
     <!-- <div class="searchDiv">
         <input class="searchbar" type="text" placeholder="What are you searching for ?"></input>
@@ -36,23 +37,20 @@
         
         </div>  -->
     <!-- <div id="demo"></div> -->
-    <div class="ui icon input">
+    <!-- <div class="ui icon input">
       <input type="text" placeholder="Search...">
-      <i class="circular search link icon"></i>
-    </div>
-    <div class="navbar">
-     
-      <!-- <input id="demo" placeholder="" /> <i></i> -->
+    <i class="circular search link icon" onclick="() => {console.log('Searching nearby stalls...')};"></i>
+    </div> -->
 
-      <a href="./login">Login</a>
-      <a href="../SignUp">SignUp</a>
-      <a href="#">Shop Now</a>
-      <a href="#">Contact Us </a>
-      <a style="background-image: url('{{ baseUrl }}/cart.png')" class="imgClick">Cart</a>
-
-      <!-- <img  src="{%static 'images/cart.png'%}" style="width: 7%;">                               -->
+    <div class="ui category search">
+      <div class="ui large icon input">
+        <input class="prompt searchInput" type="text" placeholder="Search Shops,Stores and Products..." onchange="SearchShopsProducts()">
+        <i class="search icon link" onclick="SearchShopsProducts()"></i>
+      </div>
+      <div class="results"></div>
     </div>
 
+   {% include 'Navbar.html'%}
   </div>
 </head>
 
@@ -66,11 +64,11 @@
     <a href="#">Contact</a>
   </div>
   
+  
   {% block content %}
 
    
   {% endblock %}
-
   
   
   <!--footer code starts  -->
@@ -115,7 +113,7 @@
   <script src="semantic/dist/semantic.min.js"></script>
   <script>
     
-    console.log(first_name)
+    
     // let signupRequest = {
     //   method: 'POST',
     //   headers: {
@@ -133,64 +131,25 @@
     //   }),
     // };
 
-    function getCookie(name) {
-    let cookieValue = null;
-    if (document.cookie && document.cookie !== '') {
-        const cookies = document.cookie.split(';');
-        for (let i = 0; i < cookies.length; i++) {
-            const cookie = cookies[i].trim();
-            // Does this cookie string begin with the name we want?
-            if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                break;
-            }
-        }
-    }
-    return cookieValue;
-}
+//     function getCookie(name) {
+//     let cookieValue = null;
+//     if (document.cookie && document.cookie !== '') {
+//         const cookies = document.cookie.split(';');
+//         for (let i = 0; i < cookies.length; i++) {
+//             const cookie = cookies[i].trim();
+//             // Does this cookie string begin with the name we want?
+//             if (cookie.substring(0, name.length + 1) === (name + '=')) {
+//                 cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+//                 break;
+//             }
+//         }
+//     }
+//     return cookieValue;
+// }
 
-    const csrftoken=getCookie('csrftoken');
+    // const csrftoken=getCookie('csrftoken');
 
-    function Signup() {
-      var first_name = document.getElementById('first_name').value
-    var last_name = document.getElementById('last_name').value
-    var password = document.getElementById('password').value
-    var cpassword = document.getElementById('cpassword').value
-    var email = document.getElementById('email').value
-    var mobile_no = document.getElementById('mobile_no').value
-      console.log(email, mobile_no, first_name)
-      fetch('http://127.0.0.1:8000/api/seller/register/',{ 
-      method : 'POST',
-      headers: {
-        'Accept': "application/json, text/plain, */*",
-        'Content-Type': 'application/json',
-        'Authorization':'Token ed73db9bf18f3c3067be926d5ab64cec9bcb9c5e',
-        'X-CSRFToken': csrftoken,
-      },
-      body: JSON.stringify({
-        "user": {
-          "email": email,
-          "password": password,
-          "phone": mobile_no
-        },
-        "first_name": first_name,
-        "last_name": last_name
-      })
-    }
-      )
-        .then(function(response) {
-          if(!response.ok){
-            console.log(response)
-            console.log(email, mobile_no, first_name)            
-            throw Error(response.statusText)
-          }
-          response.json()
-          console.log(email)
-        })
-        .then(data => console.log(data))
-        .catch(error => console.log(error))
-    }
-
+ 
   </script>
 <script src="{% static 'js/App.js' %}"></script>
 <script src="{% static 'js/Signup.js' %}"></script>

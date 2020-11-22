@@ -23,7 +23,9 @@ urlpatterns = [
     re_path("^login/$", views.LoginAPI.as_view()),
     #re_path("^login/phone/$", views.LoginAPI.as_view()),
     re_path("^logout/$", knox_views.LogoutView.as_view(), name='knox_logout'),
+    re_path("^send_mobile_otp/$", views.ValidatePhoneSendOTP.as_view()),
     re_path("^validate_mobile_otp/$", views.ValidatePhoneOTP.as_view()),
+    re_path("^register/$", views.Register.as_view()),
     path("api/auth", include('knox.urls')),
     
    # path("api/auth/register",RegisterAPI.as_views()),

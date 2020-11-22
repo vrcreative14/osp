@@ -1,6 +1,4 @@
-*{
 
-}
 
 #task-container{           
    box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);     
@@ -17,20 +15,29 @@
       padding: 40px;
    }
 
-   .navbar{
-        
+   .navbar{   
+    overflow: hidden;
+    align-self: flex-end;
    }
 
     .navbar a {
+  float: left;
+  display: block;
   color: white;
   padding: 14px 20px;
   text-decoration: none;
   text-align: center;
   background-repeat: no-repeat;
+  font-size: 16px;
+  font-family: Barlow;
   }
 
+  .ui.search .prompt {
+     border-radius: 0rem; 
+}
+
 .page-header{
-  padding: 3% 3% 3% 1%;              
+  padding: 4% 3% 3% 1%;            
   color: white;
   display: flex;
   justify-content:space-between;
@@ -100,7 +107,7 @@ margin: 6px 0;
   position: absolute;
   height: 85%;
   width: 16%;
- left:265px;
+  left:265px;
   width: 24px;
   height: 24px;
 }
@@ -129,6 +136,7 @@ margin: 6px 0;
       width: 50%;
       padding: 1%;
   }
+
   .shopProducts{
       display: flex;
       justify-content: space-around;
@@ -219,14 +227,13 @@ margin: 6px 0;
                 margin-bottom: 16px;
               }
 
-              .submitButton{
-                padding: 10px 15px 10px 15px;
-                background-color: rgb(135, 196, 19);
-                border: 2px solid rgb(104, 156, 58);
+              .submitBtn{
+                color: #fff!Important;
+                padding: 10px 15px 10px 15px;              
                 width: auto;
                 cursor: pointer;
                 height: 90%;
-                width: 20%;
+                width: 320px;
                 color: #fff;
                 letter-spacing: .12em;
                 border-radius: 15px;
@@ -234,32 +241,38 @@ margin: 6px 0;
                 font-style: Belgrano;
               }
 
-              /* .submitButton:hover{
+              .successBtn{
+                background-color: rgb(135, 196, 19)!Important;
+                border: 2px solid rgb(104, 156, 58)!Important;               
+              }
+
+              .continueBtn{
+                background-color: rgb(52, 73, 94)!Important;
+              }
+              /* .submitBtn:hover{
               
                font-weight: bold;
               } */
 
-              .submitButton:active{
+              .submitBtn:active{
                 transition: 0s;
                 -webkit-transition: 0s;
                 opacity: 0.5 ;
-                height: 100%;
-                
+                height: 100%;                
               } 
 
-               .submitButton:active::after{
+               .submitBtn:active::after{
                 -webkit-transition: 0s;
-  opacity: 1;
-  transition: 0s;
-  height: 110%;
-  
+                opacity: 1;
+                transition: 0s;
+                height: 110%;  
               } 
 
-.slideshow-container {
-max-width: 1000px;
-position: relative;
-margin: auto;
-}
+              .slideshow-container {
+              max-width: 1000px;
+              position: relative;
+              margin: auto;
+              }
 
 /* Hide the images by default */
 .mySlides {
@@ -380,11 +393,13 @@ a{
 }
 
 .formDiv > div{
-  margin: 20px 18px 50px 20px}
+  margin: 20px 18px 50px 20px
+}
 
 footer{
   text-align: center;
 }
+
 .icon {
   padding: 10px;
   background: dodgerblue;
@@ -625,9 +640,11 @@ li input {
 }
 
 .verifyOTP{
-  height: 30px;
-  width:30px;
-  padding: 7px;
+  height: 40px;
+  width:40px!Important;
+  padding: 10px!Important;
+  font-size: 18px!Important;
+  box-shadow: palevioletred;
   margin-top: 15px;
   margin-right: 5px;
   align-self: flex-end;
@@ -658,6 +675,14 @@ line-height: 1.4;
   margin-left: 25px; 
   margin-top: 10px; 
   pointer-events: auto;
+  padding: 10px 15px 10px 15px;  
+  cursor: pointer;
+  height: 90%;
+  width: 30%;  
+  letter-spacing: .12em;
+  border-radius: 15px;
+  text-align: center;
+  font-style: Belgrano;
 }
 
 .loaderSpan{
@@ -690,8 +715,8 @@ form input{
   font-size: 15px!Important;
 }
 
-::placeholder {
-  color : black;
+.searchInput{
+  width: 450px;
 }
 
 .centeredDiv{
@@ -706,4 +731,152 @@ justify-content: center;
 .icon{
   padding:0px;
   background:slategray;
+}
+
+.icon{  
+  background-color: black!Important;
+}
+
+::-webkit-input-placeholder {/* Chrome/Opera/Safari/Edge */ 
+  color: rgb(39, 81, 117)!Important;  
+}
+
+::-ms-input-placeholder { /* Microsoft Edge */
+  color: rgb(39, 81, 117)!Important;  
+}
+
+::-ms-input-placeholder {/* IE 10+ */
+  color: rgb(39, 81, 117)!Important;  
+}
+
+.ui.button {
+  height: 45px;
+  border-radius: 2.285714rem;
+}
+
+@media only screen and (min-width: 768px){
+.ui.tiny.modal {
+  width: 50.8%;
+  margin: 0;
+  height: 32%;
+}
+.navbar a {
+
+}
+/* .page-header{
+  display: flex;
+  flex-direction: column;
+} */
+
+}
+@media only screen and (max-width: 600px){
+  .page-header{
+  display: flex;
+  flex-direction: column;
+}
+.hamburger{
+  align-self: flex-start;
+}
+
+}
+
+.submitModal{
+  top:11%;
+  left:25%;
+}
+
+
+#otpVerificationDiv{
+  width:55opx;
+}
+
+.errorMsg{
+  color: rgb(104, 156, 58)!Important;
+  font-size: 17px !Important;
+}
+
+.ui.success.message {
+  width: 650px !Important;
+  background-color: rgb(235, 249, 220);
+  /* color: rgb(104, 156, 58)!Important;  */
+  font-size: 16px !Important; 
+  padding: 20px 50px 20px 50px;
+  margin-bottom: 20px; 
+} 
+
+.ui.success.message> .header{
+  color:rgb(74, 168, 16)!Important;
+  font-size: 16px;
+}
+
+.ui.error.message {
+  width: 650px !Important;   
+  font-size: 16px !Important; 
+  padding: 20px 50px 20px 50px;
+  margin-bottom: 20px;
+  
+} 
+
+.ui.success.message  >  div,p{
+  /* color: rgb(104, 156, 58)!Important; */
+   font-size: 17px !Important;
+} 
+.ui.error.message  >  div,p{
+  /* color: rgb(104, 156, 58)!Important; */
+   font-size: 17px !Important;
+} 
+
+.modal{
+  top:45px;
+  left:auto!Important;
+}
+
+.ui.modal{
+  text-align: center;
+}
+
+.successIcon{
+  background-color: green!Important;
+  padding: 10px 10px 30px 10px!Important;
+}
+
+.errorIcon{
+  background-color: rgb(254, 106, 99)!Important;
+  padding: 10px 10px 30px 10px!Important;
+}
+
+.showMessage{ 
+    height: fit-content;
+    width: 650px;   
+    border-radius: 2.285714rem!Important;          
+}
+
+.ui.message .header{
+  text-align: center;
+}
+
+.ui.message .header+p {
+  text-align: center;
+}
+
+.hidden{
+  display: none!Important;
+}
+
+.contentDiv{
+  font-size: 15px;
+  font-family: 'Barlow';
+ flex-wrap: wrap;
+}
+
+.big{
+  width: 400px!Important;
+}
+
+.infoLabel{
+  color: rgb(26, 82, 118)!Important;
+  background-color: transparent!Important;
+  font-size: 18px!Important;
+  font-weight: 600!Important;
+  font-family: 'Barlow';
 }
