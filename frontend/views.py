@@ -6,13 +6,13 @@ from accounts.models import Seller
 from django.utils import timezone
 from django import forms
 #from .forms import SellerForm
-from django.contrib.auth.decorators import login_required
+
 
 #from api.models import Product
 
 
 # Create your views here.
-@login_required
+
 def Home(request):
     context = {'loggedin' : True}
     return render(request,'frontend/Home.html', context)    
