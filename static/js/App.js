@@ -86,21 +86,21 @@ function currentSlide(n) {
 showSlides(slideIndex = n);
 }
 
-function showSlides(n) {
-var i;
-var slides = document.getElementsByClassName("mySlides");
-var dots = document.getElementsByClassName("dot");  
-if (n > slides.length) {slideIndex = 1}
-if (n < 1) {slideIndex = slides.length}
-for (i = 0; i < slides.length; i++) {
-   slides[i].style.display = "none";
-}
-for (i = 0; i < dots.length; i++) {
-   dots[i].className = dots[i].className.replace(" active", "");
-}
-slides[slideIndex-1].style.display = "block";
-dots[slideIndex-1].className += " active";  
-}
+// function showSlides(n) {
+// var i;
+// var slides = document.getElementsByClassName("mySlides");
+// var dots = document.getElementsByClassName("dot");  
+// if (n > slides.length) {slideIndex = 1}
+// if (n < 1) {slideIndex = slides.length}
+// for (i = 0; i < slides.length; i++) {
+//    slides[i].style.display = "none";
+// }
+// for (i = 0; i < dots.length; i++) {
+//    dots[i].className = dots[i].className.replace(" active", "");
+// }
+// slides[slideIndex-1].style.display = "block";
+// dots[slideIndex-1].className += " active";  
+// }
 
 var docWidth = document.documentElement.offsetWidth;
 
@@ -149,8 +149,69 @@ function getCookie(name) {
     return cookieValue;
 }
 
+
+
+const showSlides = (n) => {
+  var i;
+  var slides = document.getElementsByClassName("mySlides");
+  var dots = document.getElementsByClassName("dot");
+  if (n > slides.length) {slideIndex = 1}
+  if (n < 1) {slideIndex = slides.length}
+  for (i = 0; i < slides.length; i++) {
+      slides[i].style.display = "none";
+  }
+  for (i = 0; i < dots.length; i++) {
+      dots[i].className = dots[i].className.replace(" active", "");
+  }
+  slides[slideIndex-1].style.display = "block";
+  dots[slideIndex-1].className += " active";
+}
+
+
+function openTab (tabName)  {
+debugger;
+var a = document.querySelector('.ui.tab.active')
+if (a !== null)
+    document.querySelector('.ui.tab.active').classList.remove('active');
+
+document.querySelector(`[name=${CSS.escape(tabName)}]`).classList.add('active');
+}
+
+
 const csrftoken=getCookie('csrftoken');
 
+var slideIndex = 1;
+showSlides(slideIndex);
 
+// Next/previous controls
+function plusSlides(n) {
+  showSlides(slideIndex += n);
+}
 
+// Thumbnail image controls
+function currentSlide(n) {
+  showSlides(slideIndex = n);
+}
 
+window.onload = function(){
+    if (getCookie('tkl')){
+
+    }
+}
+
+function getCookie(cname) {
+    debugger
+    var name = cname + "=";
+    var decodedCookie = decodeURIComponent(document.cookie);
+    var ca = decodedCookie.split(';');
+    for(var i = 0; i < ca.length; i++) {
+      var c = ca[i];
+      while (c.charAt(0) == ' ') {
+        c = c.substring(1);
+      }
+      if (c.indexOf(name) == 0) {
+        return c.substring(name.length, c.length);
+      }
+    }
+    return "";
+  }

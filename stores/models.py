@@ -10,14 +10,15 @@ class CompanyType(models.Model):
         return self.name
 
 
-class Organization(models.Model):    
+class Organization(models.Model):
+    seller = models.ForeignKey(Seller, on_delete=models.CASCADE)
     name = models.CharField(max_length=50)
     is_registered = models.BooleanField()
     company_type = models.ForeignKey(CompanyType, on_delete=models.SET_DEFAULT, default=1)
     is_gst_registered = models.BooleanField()
     gstin = models.CharField(max_length=15 , blank=True)
 
-    def __str__(self) :
+    def __str__(self):
         return self.name
     
 

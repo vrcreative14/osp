@@ -26,17 +26,21 @@ from .utils import otp_generator
 import sys
 import random
 import requests
+from rest_framework.decorators import permission_classes
+from rest_framework.permissions import IsAuthenticated
+
 # Create your views here.
 
 #link = f'https://2factor.in/API/R1/?module=TRANS_SMS&apikey=d422a24f-24aa-11eb-83d4-0200cd936042&to={phone}&from='
 #link1 = f'https://2factor.in/API/R1/?module=TRANS_SMS&apikey=d422a24f-24aa-11eb-83d4-0200cd936042&to={phone}&from=ORIGST&templatename=MobileVerificationOTP&var1={first_name}&var2={user_otp}'
 
+@permission_classes((IsAuthenticated,))
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
 
-
+@permission_classes((IsAuthenticated,))
 def validate_phone_otp(phone, usr_first_name):        
         user = User.objects.filter(phone = phone)
         if user.exists():
@@ -88,6 +92,7 @@ def validate_phone_otp(phone, usr_first_name):
                 })
 
 
+@permission_classes((IsAuthenticated,))
 class ValidatePhoneSendOTP(APIView):
     '''
     This class view takes phone number and if it doesn't exists already then it sends otp for
@@ -285,6 +290,9 @@ class Register(APIView):
                         user = serializer.save()
                         user.save()                       
                         old.delete()
+                        request.session['user_name'] = name
+                        request.session['phone'] = phone
+                        
                         return Response({
                             'status' : True, 
                             'detail' : 'User registered successfully'
@@ -475,7 +483,7 @@ class LoginAPI(KnoxLoginView):
         print('result for request data is:')
         print(request.data)        
         try:
-            print(request.data["phone"])  
+            print(request.data["phone"])
             phone = request.data["phone"]                  
             serializer = MobileNoLoginSerializer(data = request.data)       
             serializer.is_valid(raise_exception = True)
@@ -494,8 +502,24 @@ class LoginAPI(KnoxLoginView):
             #     #user.first_login = False
             #     user.save()
             login(request, user[0], backend='accounts.backends.PhoneBackend')
-            return super().post(request, format=None)     
-        except:
+            b = super().post(request, format=None)  
+            request.session['user_token'] = b.data
+            return b
+            # return Response({
+            #     'status' : True,
+            #     'detail' : 'Logged in Successfully',
+            #     'info' : b,
+            # })  
+
+       
+        except Exception as e:
+            
+            if(not str(e.args[0]).find("Mobile number is not registered") == -1):
+                    return Response({
+                           'status' : False,
+                           'detail' : 'Entered Mobile number is not registered. <a style="font-size:15px;font-weight:300;" href="/SignUp"> New users Signup from here</a>',                          
+                            })
+
             serializer = LoginSerializer(data = request.data)                            
             serializer.is_valid(raise_exception = True)
             print(serializer.is_valid)
@@ -519,7 +543,7 @@ class LoginAPI(KnoxLoginView):
 
 @api_view(['POST'])
 def storeCreate(request): 
-    permission_classes = (permissions.IsAuthenticated,)  
+    permission_classes = (permissions.IsAuthenticated,)
     serializer = StorSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save()

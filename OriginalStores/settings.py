@@ -160,11 +160,11 @@ REST_FRAMEWORK = {
     # 'DEFAULT_AUTHENTICATION_CLASSES': (        
     #     'rest_framework_simplejwt.authentication.JWTAuthentication',
     # ),
-    # 'DEFAULT_PERMISSION_CLASSES': [
-    #     # 'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
-    #     'rest_framework.permissions.AllowAny',
-    #     #IsAuthenticated
-    # ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        # 'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+        'rest_framework.permissions.IsAuthenticated',
+        #IsAuthenticated
+    ],
     # 'USER_DETAILS_SERIALIZER': 'userapp.serializer.UserDetailsSerializer'
      'DEFAULT_AUTHENTICATION_CLASSES': ('knox.auth.TokenAuthentication',),
 }

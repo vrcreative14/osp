@@ -18,6 +18,7 @@
    .navbar{   
     overflow: hidden;
     align-self: flex-end;
+    margin-left: 100px;
    }
 
     .navbar a {
@@ -32,6 +33,10 @@
   font-family: Barlow;
   }
 
+  .navbar:hover  .menu{
+    display: block;
+  }
+
   .ui.search .prompt {
      border-radius: 0rem; 
 }
@@ -40,7 +45,7 @@
   padding: 4% 3% 3% 1%;            
   color: white;
   display: flex;
-  justify-content:space-between;
+  justify-content:flex-start;
   align-items: center;
   background-color:  rgb(52, 73, 94);
   background-image: linear-gradient(to bottom right,rgb(197,5,130,1), rgb(114,3,75,0.2));
@@ -182,9 +187,10 @@ margin: 6px 0;
   }
 
               .formcontainer > input{
-                  margin: 0 46px 4px 39px;
-                  
+                  margin: 0 46px 4px 39px;                  
               }
+
+
               .headinglabel{
                     margin: 5px 40px 39px 2px;
                     font-size: 20px;
@@ -239,15 +245,18 @@ margin: 6px 0;
                 border-radius: 15px;
                 text-align: center;
                 font-style: Belgrano;
+                border-radius: 2.285714rem;
               }
 
               .successBtn{
                 background-color: rgb(135, 196, 19)!Important;
-                border: 2px solid rgb(104, 156, 58)!Important;               
+                border: 2px solid rgb(104, 156, 58)!Important;   
+                border-radius: 2.285714rem;            
               }
 
               .continueBtn{
                 background-color: rgb(52, 73, 94)!Important;
+                border-radius: 2.285714rem;
               }
               /* .submitBtn:hover{
               
@@ -632,6 +641,7 @@ li input {
   margin-left: 25px; 
   margin-top: 10px; 
   pointer-events: auto;
+  border-radius: 2.285714rem;
 }
 
 .verifyButton::after{
@@ -751,7 +761,7 @@ justify-content: center;
 
 .ui.button {
   height: 45px;
-  border-radius: 2.285714rem;
+ 
 }
 
 @media only screen and (min-width: 768px){
@@ -776,6 +786,15 @@ justify-content: center;
 }
 .hamburger{
   align-self: flex-start;
+}
+
+.horizontalmenuDiv{
+  display: flex;
+  justify-content: space-evenly;
+  flex-direction: column;
+}
+.headingDiv{
+  height: fit-content!Important;
 }
 
 }
@@ -879,4 +898,64 @@ justify-content: center;
   font-size: 18px!Important;
   font-weight: 600!Important;
   font-family: 'Barlow';
+}
+
+.ui.tab.active{
+  display: inline;
+}
+
+.active{
+  background-color: transparent;
+}
+
+.ui.steps .active.step .icon {
+  /* color: rgba(0,0,0,.85); */
+  color: #fff;
+}
+
+.headingDiv{
+align-items: center;
+background-color: black;
+height: fit-content;
+}
+
+.headingText{
+  font-weight: 500;
+  color: #fff;
+}
+
+.container{
+  
+}
+.ui.menu{
+  margin:0;
+}
+
+.ui.menu .item{
+  padding: 0.5em 0.5em;
+}
+
+.horizontalmenuDiv{
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.clothing{
+  color: rgb(114,3,75) !Important;  
+}
+
+.handicrafts{
+  color: rgb(114,3,75) !Important;
+  
+}
+
+.kitchen{
+  color: rgb(114,3,75) !Important;
+  
+}
+
+.whiteBtn{
+  background-color:rgb(239, 235, 233) !Important; 
+  margin-top: 15px!Important;
+  margin-bottom: 15px!Important;
 }
