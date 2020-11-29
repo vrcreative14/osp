@@ -1,0 +1,411 @@
+{% extends 'base.html' %}
+
+{% load static %}
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" type="text/css" href="{%static 'css/Signup.css'%}">
+    <link href='https://fonts.googleapis.com/css?family=Finger Paint' rel='stylesheet'>
+    <style>
+        * {
+            box-sizing: border-box;
+          }
+
+
+        /* body {
+  font-family: Arial, Helvetica, sans-serif;
+} */
+
+        /* .formcontainer{
+                    display: flex;
+                    flex-direction: row;
+                } */
+
+        /* .formcontainer>div{
+                    align-items: baseline;
+                    padding: 16px 50px 20px 45px;
+                }
+
+                .formcontainer > input{
+                    margin: 0 46px 4px 39px;
+                    
+                }
+                .headinglabel{
+                      margin: 5px 40px 39px 2px;
+                      font-size: 20px;
+                      font-weight: 600;
+                }
+
+                input,select{
+                    margin-left: 200px;
+                    height: 25px;
+                }
+
+                input:hover{
+                    wnameth: 300px;                    
+                }
+                 */
+    </style>
+    {% block title %}SignUp | www.vcnity.online{% endblock %}
+</head>
+
+<body style="font-family: 'Finger Paint';">
+ 
+    {% block content %}
+    {{form}}
+    <!--  <div class="container">
+            <div>
+                <p>Hey dear! We heartly welcome you in the World of Original Stores. A place where we as a team can revolutionize the way shopping is done. Our main motto is to help out our customers and shopkeepers to evolove out of the circumstances created as our fight continues with the worldwnamee Covname-19 pandemic.</p>
+                <p>We really respect your privacy and assure you that your data is in safe hands. We never share your data to any third-party in any circumstances.</p>
+            </div>
+            <form>
+                <div class="formcontainer"> 
+                    <div style="flex-direction: column;justify-content: space-around;">
+                   
+                    <div>
+                        <i></i>
+                        <label class="headinglabel">Store/Shop Name</label>  <label>(Please mention the name for which you are famous for amongst people)</label> <br/>
+                        <input name="textShopName" type="text"/>
+                    </div>
+                    <div>
+                        <label class="headinglabel">Address </label> <br/>
+                        <input name="textShopName" type="text"/>
+                    </div>
+                    <div>
+                        <label class="headinglabel">State</label> <br/>
+                       <select>
+                           <option></option>
+                       </select>
+                    </div>
+                    <div>
+                        <label class="headinglabel">City</label> <br/>
+                        <input name="textShopName" type="text"/>
+                    </div>
+                    <div>
+                        <label class="headinglabel">Store/Shop Name </label><label> (Please mention the name for which you are famous for amongst people)</label> <br/>
+                        <input name="textShopName" type="text"/>
+                    </div>
+                </div>
+
+                <div>
+
+                    <div>
+                        <label class="headinglabel">Store/Shop Name</label>   <br/>
+                        <input name="textShopName" type="text"/>
+                    </div>
+                    <div>
+                        <label class="headinglabel">Address </label>  <br/>
+                        <input name="textShopName" type="text"/>
+                    </div>
+                    <div>
+                        <label class="headinglabel">State</label>  <br/>
+                       <select>
+                           <option></option>
+                       </select>
+                    </div>
+                    <div>
+                        <label class="headinglabel">City</label>  <br/>
+                        <input name="textShopName" type="text"/>
+                    </div>
+                    <div>
+                        <label class="headinglabel">Store/Shop Name </label><label> </label> <br/>
+                        <input name="textShopName" type="text"/>
+                    </div>
+
+                </div>
+                    
+                </div>
+                    
+
+                    </div>
+            </form>
+
+        </div> -->
+       
+<div class="container">
+    <div class="centeredDiv headingDiv">        
+        <span style="font-weight: 500;color: #fff;"> Let us help you in your Business</span>
+    </div>
+
+    <div style="display: flex;justify-content: center;" class="formdiv">        
+        <span style="font-weight: 500;color:rgb(143, 19, 196);font-size: 22px;margin:15px;"> SignUp Form </span>
+    </div>
+
+    <div class="centeredDiv">
+        <img class="ui medium image" src="https://i.ibb.co/gRt6bFJ/signup.jpg">
+    </div>
+    <br/>
+    {% include 'Message.html' %}
+    <!-- <div class="ui active tiny modal submitModal">
+        <div class="header">Header</div>
+        <div class="content">
+        <p>
+            OTP
+        </p>
+         </div>
+    <div class="actions">
+        <div class="ui approve button"></div>
+    </div>
+    </div> -->
+
+       
+        <br/>
+        {% include 'Modal.html' %}
+     
+       
+        <div class="ui column stackable center page grid">
+                    <div class="four wide column"></div>
+
+            <form class="ui ten wide column form" id="signupForm">
+                <div class="fields hidden">
+                    
+                    <span class="ui top attached label infoLabel">You are now just one step away from successfull Signup!</span>
+                    <!-- <label>Name</label> -->
+                    <div class="twelve wide field">     
+                        <div class="required inline field">
+                                <label >Full Name</label>                                 
+                                <span id="enterNameLabel" class="ui left pointing red basic label" style="display: none;">Please Enter First Name</span>             
+                        </div> 
+                               <input type="text" id="name" name="name" placeholder="Your Full Name" maxlength="70">
+                    </div>
+                </div>
+                <div class="fields"  id="mobileField">
+                    <!-- <label class="ui dividing">Contact Information (For Log in purpose either Email OR Mobile no can be used)</label> -->
+                    <div class="sixteen wide field">
+                        <div class="required inline field">
+                            <label>Mobile number </label>
+                            <span id="invalidPhoneLabel" class="ui left pointing red basic label" style="display: none;">Please Enter Valid Mobile No.</span>             
+                        </div>
+                        <div class="inline field">
+                           
+                            <input class="ui mini" style="width: 55px;margin-right: 0px;" placeholder="+91" readonly></input>                           
+                           
+                            <input class="" type="text" id="mobile_no" name="mobile_no" placeholder="Enter Your Mobile number" onchange="validateMobileno(this.value)" onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))" maxlength="10" style="width: 415px;">                          
+                            <button id="changemobileBtn" class="ui button hidden">Change</button>
+                       
+                            <!-- <label class="ui button">Change</label>                            -->
+                            <!-- <a class="ui label hidden" style="margin-left: 80px;">Change</a>     -->
+                        </div>                 
+                                   
+                  </div>                   
+              </div>
+
+              <div class="fields hidden" id="emailField">
+                <div class="twelve wide field">   
+                   <div class="inline field">
+                     <label >Email (Optional)</label>  
+                     <span id="invalidEmailLabel" class="ui left pointing red basic label" style="display: none;">Please Enter Valid Email Id</span>             
+                   </div>
+                     <div class="">
+                       <input type="email" name="email" id="emailInput" placeholder="Enter Your Email Id"  onchange="validateEmail()" maxlength="55">
+                     </div>               
+                </div>  
+             </div>
+
+            <div class="fields hidden">
+                <!-- <label class="ui dividing">Contact Information (For Log in purpose either Email OR Mobile no can be used)</label> -->           
+                <div class=" twelve wide field">   
+                 <div class="required inline field">
+                   <label>Password</label>  
+                   <span id="passwordLabel" class="ui left pointing red basic label" style="display: none;">Please Enter Password</span>             
+                </div>
+              
+
+                <div class="ui inverted icon input">
+                    <input type="password" name="password" id="password"  placeholder="Enter Password"  oninput="checkPassword()" maxlength="50">
+                    <i id="showpass" class="inverted white eye link icon" onclick="ShowPassword();">
+                    <!-- <i id="showpass" class="inverted white eye link icon" onclick="ShowPassword();" style="display: none;"> -->
+                       <!-- <a> <span style="margin-top: 8px;">Show</span> </a> -->
+                    </i>
+              </div>
+            </div> 
+            </div>
+             </form>
+     
+        
+        </div>
+        <div class="ui column stackable center page grid ">
+            <div class="four wide column"></div>
+        <div id="otpVerificationDiv" style="display: none;">
+            <!-- <div class="ui attched success message">             
+             <div class="header">
+                  Registration Information Submitted Successfully..
+                </div>
+                <p>An OTP has been sent to your registered Mobile number. <br/>
+                </p>
+            </div> -->
+         <div class="three wide column"></div>
+         <div class="four wide column" id="mobileOTPInfo">
+             <div class="fields">
+                   <label class="infoLabel">Enter the OTP received on your Mobile number</label>
+             </div>
+         </div>
+        
+         <form class="ui attached ten wide column form" id="formSubmitOTP"> 
+            <div class="fields">
+                <div class="twelve wide field">     
+                    <div class="inline required field">
+                            <label >Mobile OTP Verification</label>                             
+                            <span id="enterNameLabel" class="ui left pointing red basic label" style="display: none;">Please Enter OTP sent to your Mobile number</span>             
+                     </div>
+                     <div>
+                           <input class="verifyOTP" type="text"  id="otpMobile1"  maxlength="1" oninput="{this.value=this.value.replace(/[^0-9]/g,'')};CheckOTP()";>
+                           <input class="verifyOTP" type="text"  id="otpMobile2"  maxlength="1" oninput="this.value=this.value.replace(/[^0-9]/g,'');CheckOTP()";>
+                           <input class="verifyOTP" type="text"  id="otpMobile3"  maxlength="1" oninput="this.value=this.value.replace(/[^0-9]/g,'');CheckOTP()";>
+                           <input class="verifyOTP" type="text"  id="otpMobile4"  maxlength="1" oninput="this.value=this.value.replace(/[^0-9]/g,'');CheckOTP();";> 
+
+                                <!-- <span id="otpmatchedIcon" style="margin-left: 20px;display: none;">
+                                    <i  class="check icon successIcon"></i>                                
+                                </span>
+                                <span id="otpmismatchedIcon" style="margin-left: 20px;display: none;">
+                                    <i  class="times circle icon errorIcon"></i>                                
+                                </span> -->
+                           
+                     </div> 
+                                     
+                        </div>
+            </div>
+           
+         </form>
+           
+         <!-- <div class="three wide column" id="mobileOTPInfo">
+            <div class="fields">
+                  <label class="infoLabel">Enter the OTP received on your Mobile number</label>
+            </div>
+        </div>
+
+        <form class="ui ten wide column form "> 
+            <div class="fields">
+                <div class="twelve wide field">     
+                    <div class="required  field">
+                            <label >Mobile OTP Verification</label>                             
+                            <span id="enterNameLabel" class="ui left pointing red basic label" style="display: none;">Please Enter First Name</span>             
+                    </div> 
+                   
+                           <input class="verifyOTP" type="text"  name="otpMobile"  maxlength="1" oninput="this.value=this.value.replace(/[^0-9]/g,'')";>
+                           <input class="verifyOTP" type="text"  name="otpMobile"  maxlength="1" oninput="this.value=this.value.replace(/[^0-9]/g,'')";>
+                           <input class="verifyOTP" type="text"  name="otpMobile"  maxlength="1" oninput="this.value=this.value.replace(/[^0-9]/g,'')";>
+                           <input class="verifyOTP" type="text"  name="otpMobile"  maxlength="1" oninput="this.value=this.value.replace(/[^0-9]/g,'')";>
+                </div>
+            </div>
+         </form> -->
+
+        </div>
+        </div>
+
+   
+    <!-- </div>
+            <button id="signupSubmit" class="submitBtn"   onclick="Signup()"><b>SUBMIT</b></button>
+        </div> 
+      
+       <div class="centeredDiv">
+           
+           
+           <button id="signupSubmit" class="ui green button submitBtn" onclick="Signup()">Green</button>
+
+        </div> -->
+        <div class="centeredDiv">
+            <ul class="contentDiv">
+                <li>Providing Mobile number enables better communication</li>
+                <li>We never share your data to any third-party</li>
+            </ul>
+        </div>
+
+        <div class="centeredDiv">
+            <button id="signupBtn" class="ui button submitBtn successBtn hidden" onclick="Register()"><b>Signup</b></button>
+         </div>
+         
+             <div class="centeredDiv">
+                <span>Already have an account? <a href="/login">Login from here</a></span>
+             </div>
+             <br/>
+
+
+        <div class="centeredDiv">
+       
+             <button id="submitMobileBtn" class="ui blue button submitBtn"  onclick="SendOTP()" ><b>Continue</b></button>
+        </div>   
+        <br/>
+      <!-- <div class="centeredDiv contentDiv">
+          <li>
+            If you don't want to register using Mobile number you can register using Email Id          
+          </li>       
+          
+        </div> -->
+        <br/>
+        <!-- <div class="centeredDiv ">
+
+             <button id="emailOptionBtn" class="ui button submitBtn continueBtn" onclick="OpenEmailInput()">Register using Email ID</button>
+        </div> -->
+
+</div>
+
+       
+     <div style="display: flex;padding: 50px;" class="formDiv">
+           <h5></h5>
+
+          <div>
+
+
+          </div>
+
+
+        <!-- <div style="display: flex;flex-direction: column;" class="labelcontainer">
+
+            <label>Shop/Store Name</label>
+            <label>E-mail</label>
+            <label>Select your state</label>
+
+            <label>City</label>
+
+            <label>Pincode</label>
+
+            <label>Category</label>
+            <label>Sub Category</label>
+
+
+        </div>
+        <div style="align-self: flex-end;position: relative;top: 40px;">
+            <button class="submitBtn" onclick="">Submit</button>
+        </div>
+
+        <div style="display: flex;flex-direction: column;">
+
+            <input class="inputDetails"  placeholder="Enter your full name" style="margin-top: 6px;" />
+            <input class="inputDetails" placeholder="Enter your E-mail" style="margin-top: 6px;" />
+            <select class="selectDetails">
+                <option>---Select---</option>
+                {% for state in states %}
+                <option>{{state}}</option>
+                {% endfor %}
+            </select>
+            <input class="inputDetails" id  placeholder="Enter your city" />
+            <input class="inputDetails" placeholder="Enter your pincode" />
+
+
+            <select class="selectDetails">
+                <option>---Select---</option>
+                {% for store_category in store_categories%}
+                <option>{{store_category}}</option>
+                {%endfor%}
+            </select>
+
+            <select class="selectDetails">
+                <option>---Select---</option>
+                {% for store_subcategory in store_subcategories%}
+                <option>{{store_subcategory}}</option>
+                {%endfor%}
+            </select>
+
+        </div> -->
+
+      
+
+    </div>
+</div>
+
+<script src="{% static 'js/Misc.js' %}"></script>   
+    {% endblock %}
+</body>
+</html>

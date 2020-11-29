@@ -63,13 +63,13 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'OriginalStores.urls'
-
+PROJECT_DIR = os.path.dirname(__file__)
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
-        'OPTIONS': {
+        'OPTIONS': {    
             'context_processors': [
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
@@ -160,11 +160,11 @@ REST_FRAMEWORK = {
     # 'DEFAULT_AUTHENTICATION_CLASSES': (        
     #     'rest_framework_simplejwt.authentication.JWTAuthentication',
     # ),
-    # 'DEFAULT_PERMISSION_CLASSES': [
-    #     # 'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
-    #     'rest_framework.permissions.AllowAny',
-    #     #IsAuthenticated
-    # ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        # 'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+        'rest_framework.permissions.IsAuthenticated',
+        #IsAuthenticated
+    ],
     # 'USER_DETAILS_SERIALIZER': 'userapp.serializer.UserDetailsSerializer'
      'DEFAULT_AUTHENTICATION_CLASSES': ('knox.auth.TokenAuthentication',),
 }
@@ -188,5 +188,5 @@ EMAIL_HOST_USER = 'vcreative14@gmailcom'
 EMAIL_HOST_PASSWORD = 'Sona@1960'
 EMAIL_USE_TLS = True
 
-ALLOWED_HOSTS = ['vcnity.herokuapp.com','https://vcnity.herokuapp.com/', '127.0.0.1']
+ALLOWED_HOSTS = ['vcnity.herokuapp.com','www.vcnity.online', '127.0.0.1']
                     

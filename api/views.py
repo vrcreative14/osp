@@ -25,19 +25,22 @@ from django.conf import settings
 from .utils import otp_generator
 import sys
 import random
+import requests
+from rest_framework.decorators import permission_classes
+from rest_framework.permissions import IsAuthenticated
+
 # Create your views here.
 
 #link = f'https://2factor.in/API/R1/?module=TRANS_SMS&apikey=d422a24f-24aa-11eb-83d4-0200cd936042&to={phone}&from='
 #link1 = f'https://2factor.in/API/R1/?module=TRANS_SMS&apikey=d422a24f-24aa-11eb-83d4-0200cd936042&to={phone}&from=ORIGST&templatename=MobileVerificationOTP&var1={first_name}&var2={user_otp}'
 
+@permission_classes((IsAuthenticated,))
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
 
-
-
-
+@permission_classes((IsAuthenticated,))
 def validate_phone_otp(phone, usr_first_name):        
         user = User.objects.filter(phone = phone)
         if user.exists():
@@ -57,8 +60,7 @@ def validate_phone_otp(phone, usr_first_name):
                     old.first().save()
 
                 else:
-                    count = count + 1
-
+                    count = count + 1       
                     PhoneOTP.objects.create(
                         phone = phone,
                         otp = otp,
@@ -90,20 +92,23 @@ def validate_phone_otp(phone, usr_first_name):
                 })
 
 
-
+@permission_classes((IsAuthenticated,))
 class ValidatePhoneSendOTP(APIView):
     '''
     This class view takes phone number and if it doesn't exists already then it sends otp for
     first coming phone numbers'''
 
     def post(self, request, *args, **kwargs):
+        # user_name = request.data.get('name')
         phone_number = request.data.get('phone')
+        # if user_name:
+        #     user_name = str(user_name)
         if phone_number:
             phone = str(phone_number)
             user = User.objects.filter(phone__iexact = phone)
             if user.exists():
                 return Response({'status': False, 'detail': 'Phone Number already exists'})
-                 # logic to send the otp and store the phone number and that otp in table. 
+                # logic to send the otp and store the phone number and that otp in table. 
             else:
                 otp = send_otp(phone)
                 print(phone, otp)
@@ -113,6 +118,7 @@ class ValidatePhoneSendOTP(APIView):
                     old = PhoneOTP.objects.filter(phone__iexact = phone)
                     if old.exists():
                         count = old.first().count
+                        old.first().otp = otp
                         old.first().count = count + 1
                         old.first().save()
                     
@@ -120,10 +126,10 @@ class ValidatePhoneSendOTP(APIView):
                         count = count + 1
                
                         PhoneOTP.objects.create(
-                             phone =  phone, 
-                             otp =   otp,
-                             count = count        
-                             )
+                                phone =  phone, 
+                                otp =   otp,
+                                count = count        
+                                )
 
                     if count > 5:
                         return Response({
@@ -138,7 +144,7 @@ class ValidatePhoneSendOTP(APIView):
                             })
 
                 return Response({
-                    'status': True, 'detail': 'Otp has been sent successfully.'
+                    'status': True, 'detail': 'An SMS with an OTP(One Time Password) has been sent <br/> to your Mobile number'
                 })
         else:
             return Response({
@@ -146,18 +152,21 @@ class ValidatePhoneSendOTP(APIView):
             })
 
 
-
-
-
 class ValidatePhoneOTP(APIView):
     '''
-    If you have received otp, post a request with phone and that otp and you will be redirected to set the password
-    
+    If you have received otp, post a request with phone and that otp and you will be redirected to set the password    
     '''
-
     def post(self, request, *args, **kwargs):
-        phone = request.data.get('phone', False)
-        otp_sent   = request.data.get('otp', False)
+
+        try:
+            phone = request.data.get('mobile', False)
+            otp_sent = request.data.get('otp', False)           
+
+        except:
+            return Response({
+                            'status' : False, 
+                            'detail' : 'Please provide required fields.'
+                        })
 
         if phone and otp_sent:
             old = PhoneOTP.objects.filter(phone__iexact = phone)
@@ -167,11 +176,12 @@ class ValidatePhoneOTP(APIView):
                 if str(otp) == str(otp_sent):
                     old.logged = True
                     old.save()
-
+                    # temp_data = {'name': name,'phone': phone,'email':email,'password': password }
+                    # if(RegisterUser(temp_data)):                        
                     return Response({
-                        'status' : True, 
-                        'detail' : 'OTP matched, kindly proceed to save password'
-                    })
+                            'status' : True, 
+                            'detail' : 'OTP matched'
+                        })
                 else:
                     return Response({
                         'status' : False, 
@@ -187,7 +197,7 @@ class ValidatePhoneOTP(APIView):
         else:
             return Response({
                 'status' : 'False',
-                'detail' : 'Either phone or otp was not recieved in Post request'
+                'detail' : 'Either phone or otp was not received'
             })
 
 
@@ -238,16 +248,30 @@ def RegisterSeller(request):
 
 
 
+def RegisterUser(temp_data):
+        try:
+            serializer = UserSerializer(data=temp_data)
+            serializer.is_valid(raise_exception=True)
+            user = serializer.save()
+            u=user.save()
+            return True
+        
+        except:
+            return False
+
+
+
 class Register(APIView):
     
     '''Takes phone and a password and creates a new user only if otp was verified and phone is new'''
 
     def post(self, request, *args, **kwargs):
-        phone = request.data.get('phone', False)
-        password = request.data.get('password', False)
+        phone = request.data.get('mobile', False)
+        password = request.data.get('pw', False)
         email = request.data.get('email', False)
-        first_name = request.data.get('first_name', False)
-        last_name = request.data.get('last_name', False)
+        name = request.data.get('name', False)
+        otp = request.data.get('otp', False)
+       
         if phone and password:
             phone = str(phone)
             user = User.objects.filter(phone__iexact = phone)
@@ -259,39 +283,37 @@ class Register(APIView):
                 if old.exists():
                     old = old.first()
                     if old.logged:
-                        Temp_data = {'phone': phone, 'password': password }
+                        Temp_data = {'name':name,'phone': phone,'email':email, 'password': password}
 
-                        serializer = SellerUserSerializer(data=Temp_data)
+                        serializer = UserSerializer(data=Temp_data)
                         serializer.is_valid(raise_exception=True)
                         user = serializer.save()
-                        user.save()
-
+                        user.save()                       
                         old.delete()
+                        request.session['user_name'] = name
+                        request.session['phone'] = phone
+                        
                         return Response({
                             'status' : True, 
-                            'detail' : 'Congrts, user has been created successfully.'
+                            'detail' : 'User registered successfully'
                         })
 
                     else:
                         return Response({
                             'status': False,
                             'detail': 'Your otp was not verified earlier. Please go back and verify otp'
-
                         })
                 else:
                     return Response({
                     'status' : False,
                     'detail' : 'Phone number not recognised. Kindly request a new otp with this number'
-                })
-                    
-
-
+                })              
 
 
         else:
             return Response({
                 'status' : 'False',
-                'detail' : 'Either phone or password was not recieved in Post request'
+                'detail' : 'Either phone or password was not received '
             })
 
 
@@ -461,7 +483,7 @@ class LoginAPI(KnoxLoginView):
         print('result for request data is:')
         print(request.data)        
         try:
-            print(request.data["phone"])  
+            print(request.data["phone"])
             phone = request.data["phone"]                  
             serializer = MobileNoLoginSerializer(data = request.data)       
             serializer.is_valid(raise_exception = True)
@@ -470,7 +492,7 @@ class LoginAPI(KnoxLoginView):
             if user[0].is_active == False:
                     return Response({
                     'status': False,
-                    'detail':'Please verify your Email through OTP, before logging in.'
+                    'detail':'Please verify your Mobile number through OTP, before logging in.'
                 })
             # if user.last_login is None :
             #         #user.first_login = True
@@ -480,8 +502,24 @@ class LoginAPI(KnoxLoginView):
             #     #user.first_login = False
             #     user.save()
             login(request, user[0], backend='accounts.backends.PhoneBackend')
-            return super().post(request, format=None)     
-        except:
+            b = super().post(request, format=None)  
+            request.session['user_token'] = b.data
+            return b
+            # return Response({
+            #     'status' : True,
+            #     'detail' : 'Logged in Successfully',
+            #     'info' : b,
+            # })  
+
+       
+        except Exception as e:
+            
+            if(not str(e.args[0]).find("Mobile number is not registered") == -1):
+                    return Response({
+                           'status' : False,
+                           'detail' : 'Entered Mobile number is not registered. <a style="font-size:15px;font-weight:300;" href="/SignUp"> New users Signup from here</a>',                          
+                            })
+
             serializer = LoginSerializer(data = request.data)                            
             serializer.is_valid(raise_exception = True)
             print(serializer.is_valid)
@@ -505,14 +543,14 @@ class LoginAPI(KnoxLoginView):
 
 @api_view(['POST'])
 def storeCreate(request): 
-    permission_classes = (permissions.IsAuthenticated,)  
+    permission_classes = (permissions.IsAuthenticated,)
     serializer = StorSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save()
     return Response(serializer.data)
 
 
-def send_otp(phone, usr_first_name):
+def send_otp(phone):
     """
     This is an helper function to send otp to session stored phones or 
     passed phone number as argument.
@@ -522,9 +560,10 @@ def send_otp(phone, usr_first_name):
         key = otp_generator()
         phone = str(phone)
         otp_key = str(key)
-        seller_name = str(usr_first_name)
+        # seller_name = str(usr_first_name)
         #link = f'https://2factor.in/API/R1/?module=TRANS_SMS&apikey=fc9e5177-b3e7-11e8-a895-0200cd936042&to={phone}&from=wisfrg&templatename=wisfrags&var1={otp_key}'
-        link =  f'https://2factor.in/API/R1/?module=TRANS_SMS&apikey=d422a24f-24aa-11eb-83d4-0200cd936042&to={phone}&from=ORIGST&templatename=MobileVerificationOTP&var1={seller_name}&var2={otp_key}'
+        #link =  f'https://2factor.in/API/R1/?module=TRANS_SMS&apikey=d422a24f-24aa-11eb-83d4-0200cd936042&to={phone}&from=ORIGST&templatename=MobileVerificationOTP&var1={seller_name}&var2={otp_key}'
+        #link = f'https://2factor.in/API/R1/?module=TRANS_SMS&apikey=d422a24f-24aa-11eb-83d4-0200cd936042&to={phone}&from=VCNITY&templatename=Mobile+Number+Verification+OTP&var1={seller_name}&var2={otp_key}'
         #result = requests.get(link, verify=False)
 
         return otp_key

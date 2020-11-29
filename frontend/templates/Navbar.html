@@ -1,0 +1,54 @@
+
+ <div class="navbar">
+     
+    <!-- <input id="demo" placeholder="" /> <i></i> -->
+    <style>
+      .transparentIcon{
+        background-color: transparent!Important;
+      }
+
+      i.icon{
+        display: inline!Important;
+      }
+    </style>         
+     
+            {% if loggedin %}
+             <a >  {{user_name}}'s Vcnity</a>
+             <div id="profileMenu" class="ui vertical menu" style="position: absolute;width:130px;top:85px;display: none;">
+              <a class="active teal item">
+                Inbox
+                <div class="ui teal left pointing label">1</div>
+              </a>
+              <a class="item">
+                Spam
+                <div class="ui label">51</div>
+              </a>
+              <a class="item">
+                Updates
+                <div class="ui label">1</div>
+              </a>
+              <div class="item">
+               
+              </div>
+            </div>
+             <!-- <a style="background-image: url('{{ baseUrl }}/cart.png')" class="imgClick"> -->
+              <a>
+              <i class="shopping cart icon transparentIcon"></i>
+              Cart
+              </a>  
+            {% else %}
+            <a href="../SignUp">      
+            <i class="user plus icon transparentIcon">       
+            </i>
+                Login/SignUp                   
+            </a>
+            <a href="#">Shop Now</a>
+            {% endif %}
+
+   
+   
+    
+
+    
+    
+  </div>

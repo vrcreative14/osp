@@ -7,5 +7,6 @@ urlpatterns = [
     path('SignUp', views.SignUp,name="SignUp"),
     path('Home',views.Home,name="Home"),    
     path('Products/<type>/', views.FetchProducts),
-    path('Sign', views.index, name="Submit")
+    path('Sign', views.index, name="Submit"),
+    path('SellerRegistration', views.RegisterSeller, name="SellerRegistration")
 ]

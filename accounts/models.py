@@ -5,11 +5,13 @@ from django.contrib.auth.models import (
 from django.core.validators import RegexValidator
 from rest_framework.authtoken.models import Token
 from django.contrib import auth
+import re
+from django.core.exceptions import ValidationError
 #from django.contrib.auth.models import User
 # Create your models here.
 
 class UserManager(BaseUserManager):
-    def create_user(self, email,phone, password=None, is_staff=False, is_admin=False, is_active=False):
+    def create_user(self,name, email,phone, password=None, is_staff=False, is_admin=False, is_active=True):
         if not email and not phone:
             raise ValueError("Users must have either an email address or mobile number")
         if not password:
@@ -17,6 +19,7 @@ class UserManager(BaseUserManager):
 
         
         user_obj = self.model(
+            name=name,
             email = self.normalize_email(email),
             phone = phone,
         )
@@ -28,8 +31,9 @@ class UserManager(BaseUserManager):
         return user_obj
 
 
-    def create_staffuser(self, email,phone, password=None):
+    def create_staffuser(self,name, email,phone, password=None):
         user = self.create_user(
+            name,
             email,
             phone,
             password=password,
@@ -37,15 +41,28 @@ class UserManager(BaseUserManager):
         )
         return user
 
-    def create_superuser(self, email,phone, password=None):
-        user = self.create_user(
-            email,
-            phone,
-            password=password,
-            is_staff=True,
-            is_admin=True
-        )
-        return user
+    def create_superuser(self,name, email,phone, password=None):
+        if not phone:
+            phone = None
+            user = self.create_user(
+                name,
+                email,
+                phone,
+                password=password,
+                is_staff=True,
+                is_admin=True
+            )
+        else:    
+            user = self.create_user(
+                name,
+                email,
+                phone,
+                password=password,
+                is_staff=True,
+                is_admin=True
+            )
+            return user
+    
     
 
 
@@ -53,6 +70,7 @@ class User (AbstractBaseUser):
     phone_regex = RegexValidator(regex=r'^\+?1?\d{9,14}$', message="Phone number must be entered in the format: '+99999999")
     email = models.EmailField(max_length=255, unique=True, blank=True, null=True)
     phone = models.CharField(validators=[phone_regex], max_length=13, unique=True, blank=True, null=True)
+    name = models.CharField(max_length=150)
     #first_name = models.CharField(max_length=20)
     #last_name = models.CharField(max_length=20)
     #name = models.CharField(max_length=20)
@@ -69,11 +87,11 @@ class User (AbstractBaseUser):
 
     
     def __str__(self):
-        return self.email
+        return self.name
 
 
     def get_full_name(self):
-        return self.email
+        return self.name
 
     def get_short_name(self):
         return self.email
@@ -104,17 +122,43 @@ class User (AbstractBaseUser):
         return self.active
 
 
+    def save(self, *args, **kwargs):
+             # Empty strings are not unique, but we can save multiple NULLs
+            if not self.email:
+                self.email = None
+
+            super().save(*args, **kwargs)  # Python3-style super()
+
+    # def save(self, *args, **kwargs):
+    #         regex = '^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w{2,3}$'
+    #         # ... other things not important here
+    #         #self.email = self.email.lower().strip()  # Hopefully reduces junk to ""
+    #         if self.email != "":                     # If it's not blank
+    #             if not (re.search(regex,self.email)):    # If it's not an email address
+    #                 raise ValidationError(u'%s is not an email address, dummy!' % self.email)
+    #         if self.email == "":
+    #             self.email = None
+    #         super(User, self).save(*args, **kwargs)
+
+    # def clean(self):
+    #             #     """
+    #             # Clean up blank fields to null
+    #             # """
+    #         if self.email == "" :
+    #             self.email = None
+
 
 class Seller(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     first_name = models.CharField(max_length=50)
+    middle_name = models.CharField(max_length=50, blank=True)
     last_name = models.CharField(max_length=50, blank=True)
     #email = models.EmailField()    
    # login_password = models.CharField(max_length=50)
-   # organization = models.ForeignKey(Organization, on_delete=models.CASCADE, default=5)
+    #organization = models.ForeignKey(Organization, on_delete=models.CASCADE, default=5)
     joining_date = models.DateField(auto_now_add=True)
     
-    def __str__(self) :
+    def __str__(self):
         return self.first_name
     
     # def __str__(self):
@@ -175,6 +219,9 @@ class PhoneOTP(models.Model):
     phone = models.CharField(validators=[phone_regex], max_length=13, unique=True, blank=True, null=True)
     otp = models.CharField(max_length = 9, blank = True, null = True)
     count = models.IntegerField(default = 0, help_text = 'Number of otp sent')
+    logged      = models.BooleanField(default = False, help_text = 'If otp verification got successful')
+    forgot      = models.BooleanField(default = False, help_text = 'only true for forgot password')
+    forgot_logged = models.BooleanField(default = False, help_text = 'Only true if validdate otp forgot get successful')
     
     def __str__(self):
             return 'OTP code:' + str(self.otp) + "sent to" + str(self.phone)

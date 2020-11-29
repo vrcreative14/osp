@@ -5,18 +5,35 @@ from rest_framework.response import Response
 from accounts.models import Seller
 from django.utils import timezone
 from django import forms
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
+import datetime
 #from .forms import SellerForm
-
 #from api.models import Product
-
-
 # Create your views here.
 
+
 def Home(request):
-    return render(request,'frontend/Home.html')    
+    try:
+        #name = request.session['user_name']
+        #phone = request.session['phone']
+        token = request.session['user_token']
+        user_name = token["user"]["name"]
+        date_string = token["expiry"]
+        format = "%Y-%m-d"
+        #d=datetime.datetime.strftime(float(date_string), format)
+        
+        context = {'loggedin' : True, 'user_name': user_name}
+
+    except Exception as e:
+        context = {'loggedin' : False,'user_name':None}
+    
+    return render(request,'frontend/Home.html', context)
+
 
 def Login(request):
     return render(request,'frontend/Login.html')
+
 
 def SignUp(request):
     # if request.method == "POST": 
@@ -57,6 +74,12 @@ def SignUp(request):
         context = {'states' : "states", 'store_categories' : "store_categories", 'store_subcategories' : "store_subcategories"}
         # print('no')
         return render(request,'frontend/SignUp.html', context)
+
+login_required(login_url='/login/')
+def RegisterSeller(request):
+    #token = request.data.get('token', False)
+    #context = {'email' : }
+    return render(request,'frontend/SellerRegistration.html')
 
 
 def Products(request,type):
