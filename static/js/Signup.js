@@ -134,28 +134,25 @@ const ShowResult = (data) => {
 
 const DisplayMessage = (heading,detail, status) =>{
     if(status==true){
-        if(heading=='')
-        heading='Success'
+        
     document.querySelector('.showMessage').classList.remove('error') ;
     document.querySelector('.showMessage').classList.add('success') ;
     }
     else{
-        if(heading=='')
-        heading='Error Occured'
+        
     document.querySelector('.showMessage').classList.remove('success') ;
     document.querySelector('.showMessage').classList.add('error') ;
     }
 
     document.querySelector('.showMessage').style.display='block'
-    //document.querySelector('.showMessage>div').innerText = heading
-    document.querySelector('.showMessage>p').innerHTML = detail 
-    
+    document.querySelector('.showMessage>div').innerText = heading
+    document.querySelector('.showMessage>p').innerHTML = detail     
 
 }
 
 
 const OpenSignupForm = () => {
-   let d= document.querySelectorAll('.fields.hidden')
+   let d = document.querySelectorAll('.fields.hidden')
    for(let i=0;i<d.length;i++){
        d[i].classList.remove('hidden')
    }
@@ -163,10 +160,13 @@ const OpenSignupForm = () => {
    document.getElementById('')
 }
 
-function SendOTP() {
-   
+function SendOTP() {   
     //validateSignupForm();
-    validateMobileno();
+    enteredMobile = document.getElementById('mobile_no').value;
+    if(validateMobileno(enteredMobile))
+        showMessage('mobileno',false)       
+    else
+        showMessage('mobileno',true)       
     if(!isFormValid)
     return false;
     // var name = document.getElementById('name').value  
@@ -260,7 +260,7 @@ function SendOTP() {
         // .catch(error => console.log(error))
   }
 
-const OpenMobileVerification = () =>{   
+const OpenMobileVerification = () => {   
     //document.getElementById('signupForm').style.display = 'none'
     document.getElementById('otpVerificationDiv').style.display = 'block'
     document.getElementById('submitMobileBtn').style.display = 'none'
@@ -270,9 +270,17 @@ const OpenMobileVerification = () =>{
 
 const validateSignupForm = () => {     
     CheckName();
-    validateEmail();
+    let email = document.getElementById('emailInput').value;  
+    if(validateEmail(email))
+    showMessage('email',false)       
+    else
+    showMessage('email',true)       
     checkPassword();       
-    validateMobileno();
+    let enteredMobile = document.getElementById('mobile_no').value;
+   if (validateMobileno(enteredMobile))
+       showMessage('mobileno', false)
+   else
+       showMessage('mobileno', true)
     //checkConfirmPassword();       
 }
 
@@ -298,40 +306,6 @@ function checkMobileno(){
    
 }
 
-function validateEmail() {
-    let email = document.getElementById('emailInput').value;
-    if(email == undefined || email =='')
-        return
-    var regex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    console.log(regex.test(String(email).toLowerCase()));
-    
-    if(regex.test(String(email).toLowerCase()))
-    {
-        showMessage('email',false)       
-    }
-    else
-    {        
-        showMessage('email',true)
-        isFormValid=false;
-         //document.getElementById('invalidEmailLabel').style.display='block';
-    }
-}
-
-const validateMobileno = () =>{
-    debugger;
-    enteredMobile = document.getElementById('mobile_no').value;
-    // if (enteredMobile == undefined || enteredMobile == '')
-    //   showMessage('mobileno',true)
-    var regex = /^\d{10}$/;
-    if( regex.test(String(enteredMobile).toLowerCase())){
-         showMessage('mobileno', false)
-         isFormValid=true;
-    }
-    else{
-         showMessage('mobileno', true)
-         isFormValid=false;
-    }
-}
 
 // const giveMsgforPassword = () => {
 //     document.getElementById('passwordLabel').style.display
@@ -475,6 +449,7 @@ const CheckOTP = () => {
     postJSON('http://127.0.0.1:8000/api/validate_mobile_otp/', jsonbody)    
 }
 
-var OpenEmailInput=() =>{
+var OpenEmailInput=() => {
     document.getElementById('')
 }
+

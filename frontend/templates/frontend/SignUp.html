@@ -124,8 +124,7 @@
         </div> -->
        
 <div class="container">
- <div style="display: flex;justify-content: center;align-items: center;background-color: black;height: 55px;"
-        class="formdiv">
+    <div class="centeredDiv headingDiv">        
         <span style="font-weight: 500;color: #fff;"> Let us help you in your Business</span>
     </div>
 
@@ -155,7 +154,7 @@
         {% include 'Modal.html' %}
      
        
-        <div class="ui column stackable center page grid ">
+        <div class="ui column stackable center page grid">
                     <div class="four wide column"></div>
 
             <form class="ui ten wide column form" id="signupForm">
@@ -182,7 +181,7 @@
                            
                             <input class="ui mini" style="width: 55px;margin-right: 0px;" placeholder="+91" readonly></input>                           
                            
-                            <input class="" type="text" id="mobile_no" name="mobile_no" placeholder="Enter Your Mobile number" onchange="validateMobileno()" onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))" maxlength="10" style="width: 415px;">                          
+                            <input class="" type="text" id="mobile_no" name="mobile_no" placeholder="Enter Your Mobile number" onchange="validateMobileno(this.value)" onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))" maxlength="10" style="width: 415px;">                          
                             <button id="changemobileBtn" class="ui button hidden">Change</button>
                        
                             <!-- <label class="ui button">Change</label>                            -->
@@ -316,8 +315,15 @@
         <div class="centeredDiv">
             <button id="signupBtn" class="ui button submitBtn successBtn hidden" onclick="Register()"><b>Signup</b></button>
          </div>
-            <br/>
+         
+             <div class="centeredDiv">
+                <span>Already have an account? <a href="/login">Login from here</a></span>
+             </div>
+             <br/>
+
+
         <div class="centeredDiv">
+       
              <button id="submitMobileBtn" class="ui blue button submitBtn"  onclick="SendOTP()" ><b>Continue</b></button>
         </div>   
         <br/>
@@ -398,10 +404,8 @@
 
     </div>
 </div>
+
+<script src="{% static 'js/Misc.js' %}"></script>   
     {% endblock %}
-
-    
 </body>
-<script src="{% static 'js/Signup.js' %}"></script>
-
 </html>

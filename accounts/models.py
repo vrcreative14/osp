@@ -151,13 +151,14 @@ class User (AbstractBaseUser):
 class Seller(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     first_name = models.CharField(max_length=50)
+    middle_name = models.CharField(max_length=50, blank=True)
     last_name = models.CharField(max_length=50, blank=True)
     #email = models.EmailField()    
    # login_password = models.CharField(max_length=50)
-   # organization = models.ForeignKey(Organization, on_delete=models.CASCADE, default=5)
+    #organization = models.ForeignKey(Organization, on_delete=models.CASCADE, default=5)
     joining_date = models.DateField(auto_now_add=True)
     
-    def __str__(self) :
+    def __str__(self):
         return self.first_name
     
     # def __str__(self):
