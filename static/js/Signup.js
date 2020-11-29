@@ -273,7 +273,7 @@ const validateSignupForm = () => {
     validateEmail();
     checkPassword();       
     validateMobileno();
-    //checkConfirmPassword();       
+  
 }
 
 const CheckMandatoryFields = () =>{    
