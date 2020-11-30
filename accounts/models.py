@@ -151,7 +151,7 @@ class User (AbstractBaseUser):
 class Seller(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     first_name = models.CharField(max_length=50)
-    middle_name = models.CharField(max_length=50, blank=True)
+    #middle_name = models.CharField(max_length=50, blank=True)
     last_name = models.CharField(max_length=50, blank=True)
     #email = models.EmailField()    
    # login_password = models.CharField(max_length=50)

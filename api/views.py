@@ -34,13 +34,13 @@ from rest_framework.permissions import IsAuthenticated
 #link = f'https://2factor.in/API/R1/?module=TRANS_SMS&apikey=d422a24f-24aa-11eb-83d4-0200cd936042&to={phone}&from='
 #link1 = f'https://2factor.in/API/R1/?module=TRANS_SMS&apikey=d422a24f-24aa-11eb-83d4-0200cd936042&to={phone}&from=ORIGST&templatename=MobileVerificationOTP&var1={first_name}&var2={user_otp}'
 
-@permission_classes((IsAuthenticated,))
+
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
 
-@permission_classes((IsAuthenticated,))
+
 def validate_phone_otp(phone, usr_first_name):        
         user = User.objects.filter(phone = phone)
         if user.exists():
@@ -92,7 +92,7 @@ def validate_phone_otp(phone, usr_first_name):
                 })
 
 
-@permission_classes((IsAuthenticated,))
+
 class ValidatePhoneSendOTP(APIView):
     '''
     This class view takes phone number and if it doesn't exists already then it sends otp for

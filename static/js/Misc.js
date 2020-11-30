@@ -26,7 +26,7 @@ function Login() {
 
 }
 
-const validateMobileno = (enteredMobile) =>{
+function validateMobileno(enteredMobile) {
     debugger;
    
     // if (enteredMobile == undefined || enteredMobile == '')
@@ -118,7 +118,7 @@ const ShowResult = (data) => {
                 OpenMobileVerification();
                 DisplayMessage('',data.detail,data.status)
                 document.querySelector('#mobileField').classList.add('hidden')
-                document.querySelector('#signupBtn').classList.add('hidden')
+                //document.querySelector('#signupBtn').classList.add('hidden')
                // OpenSignupForm()
                 break;
 
