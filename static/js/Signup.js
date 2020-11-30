@@ -276,17 +276,12 @@ const validateSignupForm = () => {
     else
     showMessage('email',true)       
     checkPassword();       
-<<<<<<< HEAD
-    validateMobileno();
-  
-=======
     let enteredMobile = document.getElementById('mobile_no').value;
    if (validateMobileno(enteredMobile))
        showMessage('mobileno', false)
    else
        showMessage('mobileno', true)
     //checkConfirmPassword();       
->>>>>>> e788a6324a72c6e3f31b149151f2450c8de2c81c
 }
 
 const CheckMandatoryFields = () =>{    
