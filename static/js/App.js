@@ -73,7 +73,7 @@ var wrapper = document.getElementById('storeListDiv')
 }
 
 
-var slideIndex = 1;
+
 //showSlides(slideIndex);
 
 // Next/previous controls
@@ -151,21 +151,7 @@ function getCookie(name) {
 
 
 
-const showSlides = (n) => {
-  var i;
-  var slides = document.getElementsByClassName("mySlides");
-  var dots = document.getElementsByClassName("dot");
-  if (n > slides.length) {slideIndex = 1}
-  if (n < 1) {slideIndex = slides.length}
-  for (i = 0; i < slides.length; i++) {
-      slides[i].style.display = "none";
-  }
-  for (i = 0; i < dots.length; i++) {
-      dots[i].className = dots[i].className.replace(" active", "");
-  }
-  slides[slideIndex-1].style.display = "block";
-  dots[slideIndex-1].className += " active";
-}
+
 
 
 function openTab (tabName)  {
@@ -180,8 +166,7 @@ document.querySelector(`[name=${CSS.escape(tabName)}]`).classList.add('active');
 
 const csrftoken=getCookie('csrftoken');
 
-var slideIndex = 1;
-showSlides(slideIndex);
+
 
 // Next/previous controls
 function plusSlides(n) {
@@ -196,6 +181,11 @@ function currentSlide(n) {
 window.onload = function(){
     if (getCookie('tkl')){
 
+    }
+    debugger
+    var headerLinks=document.querySelectorAll('.navbar>a')
+    for(let i=0;i<headerLinks.length;i++){
+        headerLinks[i].classList.remove('hidden')
     }
 }
 

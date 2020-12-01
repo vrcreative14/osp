@@ -252,6 +252,7 @@ margin: 6px 0;
                 background-color: rgb(135, 196, 19)!Important;
                 border: 2px solid rgb(104, 156, 58)!Important;
                 border-radius: 2.285714rem!Important;
+                color: #fff!Important;
               }
 
               .continueBtn{
@@ -869,8 +870,8 @@ justify-content: center;
 
 .showMessage{
     height: fit-content;
-    width: 650px;
-    border-radius: 2.285714rem!Important;
+    width: fit-content !Important;
+    border-radius: 0.285714rem!Important;
 }
 
 .ui.message .header{
@@ -932,9 +933,9 @@ color: #fff;
   }
 
   .formheadingSpan{
-    margin:10px;
+    margin:10px !Important;
     /* font-weight:600px!Important; */
-    font-size:16.5px;
+    font-size:16.5px!Important;
   }
 
   .headingSpan{

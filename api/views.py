@@ -118,9 +118,10 @@ class ValidatePhoneSendOTP(APIView):
                     old = PhoneOTP.objects.filter(phone__iexact = phone)
                     if old.exists():
                         count = old.first().count
-                        old.first().otp = otp
-                        old.first().count = count + 1
-                        old.first().save()
+                        old_otp_obj = old.first()
+                        old_otp_obj.otp = otp
+                        old_otp_obj.count = count + 1
+                        old_otp_obj.save(force_update=True)
                     
                     else:
                         count = count + 1
@@ -148,7 +149,7 @@ class ValidatePhoneSendOTP(APIView):
                 })
         else:
             return Response({
-                'status': 'False', 'detail' : "I haven't received any phone number. Please do a POST request."
+                'status': 'False', 'detail' : "We haven't received any phone number. Please do a POST request."
             })
 
 
@@ -274,10 +275,15 @@ class Register(APIView):
        
         if phone and password:
             phone = str(phone)
+            user_email = User.objects.filter(email__iexact = email)
+            if user_email.exists():
+                 return Response({'status': False,
+                 'detail': 'Email entered is already registered.Try with different Email OR <br/> <a href="/login">Login into existing account from here</a>'})
+
             user = User.objects.filter(phone__iexact = phone)
             if user.exists():
                 return Response({'status': False,
-                 'detail': 'Phone Number already have account associated. Kindly try forgot password'})
+                 'detail': 'Phone number entered is already registered.Try with different mobile number OR <br/> <a href="/Login">Login into existing account from here</a>'})
             else:
                 old = PhoneOTP.objects.filter(phone__iexact = phone)
                 if old.exists():

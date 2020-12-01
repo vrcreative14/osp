@@ -14,6 +14,9 @@
 <body>
     {% block content %}
 
+    <div class="centeredDiv headingDiv">        
+      <span class="headingSpan" style="font-weight: 500;color: #fff;"> Providing the below details will help us to create your online Store and help customers reach you efficiently !</span>
+  </div>
     <div class="">
         <div class="ui steps tabular menu">
             <a class="item step active" data-id="sellerInfoTab" data-tab="sellerInfo" onclick="openTab('sellerInfo')">
@@ -42,7 +45,10 @@
 
           <div id="sellerInfo" name="sellerInfo" class="ui tab active" data-tab="sellerInfo">            
             <form class="ui form">
-                <h4 class="ui dividing header">Shipping Information</h4>
+                <!-- <h4 class="ui dividing header">Shipping Information</h4> -->
+                <div class="ui header centeredDiv formheadingDiv">
+                  <span class="formheadingSpan"> Seller Contact Information </span>
+                 </div>
                 <div class="field">
                   <label>Enter your Full Name as per the Official Identity Card</label>
                   <div class="two fields">
@@ -100,13 +106,11 @@
                   
                 </div>              
              
-                 <div class="ui segment">
-                  <div class="field">
-                  
-                  </div>
-                </div>
                
-              </form>                  
+              </form>    
+              <div class="centeredDiv">
+                <button class="ui button successBtn submitBtn formheadingSpan">Save & Next</button>
+              </div>              
           </div>
 
 
@@ -119,12 +123,12 @@
                   <br/>
                   <div class="fields">
                   
-                    <div class="four wide field">
+                    <div class="four wide required field">
                       <label class="">Enter Name of your Shop</label>
                       <input type="text" name="shipping[first-name]" placeholder="Shop/Store Name">
                     </div>
                    
-                    <div class="six wide field">
+                    <div class="six wide required field">
                       <label class="">Choose Product Category (You may choose multiple items found in your Shop)</label>
                       <select class="ui dropdown">
                         <option value="0">Select Product Categories</option>
@@ -140,7 +144,7 @@
 
                
                  <div class="fields">
-                    <div class="four wide inline field">
+                    <div class="four wide inline required field">
                        <label class="">Is Your Shop registered under GST ?</label>
                     </div>
                     <div class=" inline field">
@@ -163,7 +167,7 @@
             
                 <div class="field">
                  <div class="fields">
-                   <div class="four wide field hidden gstinEntry">
+                   <div class="four wide required field hidden gstinEntry">
                        <label>Enter your 15 digit GSTIN number</label>
                        <input placeholder="" onkeyup="checkGSTIN()">
                   </div>
@@ -227,8 +231,9 @@
                 
                 </div>                                   
               </form>
-                    <div>
-                      <button class="ui button successBtn">Save & Next</button>
+                    <div class="centeredDiv">
+
+                      <button class="ui button successBtn submitBtn formheadingSpan">Save & Next</button>
                     </div>
           </div>
 

@@ -166,7 +166,7 @@ class MobileNoLoginSerializer(serializers.Serializer):
     
     #email = serializers.CharField()
     phone = serializers.CharField()
-    password = serializers.CharField(
+    pft = serializers.CharField(
         style={'input_type':'password'}, trim_whitespace = False
     )
 
@@ -175,7 +175,7 @@ class MobileNoLoginSerializer(serializers.Serializer):
         
         #email = attrs.get('email')
         phone = attrs.get('phone')
-        password = attrs.get('password')
+        password = attrs.get('pft')
 
         if phone and password:
             if User.objects.filter(phone = phone).exists():
