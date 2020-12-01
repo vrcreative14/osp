@@ -84,10 +84,10 @@ def RegisterSeller(request):
         token = request.session['user_token']
         user_email = token["user"]["email"]
         user_name = token["user"]["name"]
-
+        context = {'loggedin':True,'email' : 'abhay123@gmail.com', 'states': States.STATE_UT, 'categories': categories}
     except:            
         categories = ProductCategory.objects.all()    
-        context = {'loggedin':True,'email' : 'abhay123@gmail.com', 'states': States.STATE_UT, 'categories': categories}
+        context = {'loggedin':True,'email' : '', 'states': States.STATE_UT, 'categories': categories}
 
     return render(request,'frontend/SellerRegistration.html',context)
 

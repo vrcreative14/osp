@@ -1,2 +1,6 @@
 env/
 __pycache__/
+api/__pycache__/
+frontend/__pycache__/
+stores/__pycache__/
+products/__pycache__/
