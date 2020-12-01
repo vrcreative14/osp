@@ -26,7 +26,7 @@ function Login() {
 
 }
 
-const validateMobileno = (enteredMobile) =>{
+function validateMobileno(enteredMobile) {
     debugger;
    
     // if (enteredMobile == undefined || enteredMobile == '')
@@ -70,7 +70,8 @@ const postJSON = (url, jsonBody) => {
         headers: {
         'Accept': "application/json, text/plain, */*",
         'Content-Type': 'application/json',     
-        'Accept-Encoding':'gzip,deflate,br',      
+        'Accept-Encoding':'gzip,deflate,br',
+        'X-CSRFToken':csrftoken,      
         },
         body: jsonBody
     }
@@ -118,7 +119,7 @@ const ShowResult = (data) => {
                 OpenMobileVerification();
                 DisplayMessage('',data.detail,data.status)
                 document.querySelector('#mobileField').classList.add('hidden')
-                document.querySelector('#signupBtn').classList.add('hidden')
+                //document.querySelector('#signupBtn').classList.add('hidden')
                // OpenSignupForm()
                 break;
 
@@ -128,9 +129,18 @@ const ShowResult = (data) => {
             
             case 'User registered successfully':
                 //DisplayMessage('Required Data missing',data.detail,data.status)
+                debugger
                 document.getElementById('otpVerificationDiv').style.display = 'none';    
                 $('.ui.modal').modal('show');
-                setTimeout(() => {  window.open('/','_self') }, 3000);
+                var pft = document.getElementById('password').value  
+                var mobile_no = document.getElementById('mobile_no').value
+                let jsonBody = JSON.stringify({
+                    'phone': mobile_no,
+                    'pft':pft,
+                })
+                postJSON('http://127.0.0.1:8000/api/login/', jsonBody)
+                debugger
+                setTimeout(() => {  window.open('/','_self') }, 2000);
 
             case 'OTP matched':
                // document.getElementById('otpmatchedIcon').style.display = 'inline';

@@ -8,6 +8,8 @@ from django import forms
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 import datetime
+from stores.models import States
+from products.models import ProductCategory
 #from .forms import SellerForm
 #from api.models import Product
 # Create your views here.
@@ -78,8 +80,16 @@ def SignUp(request):
 login_required(login_url='/login/')
 def RegisterSeller(request):
     #token = request.data.get('token', False)
-    #context = {'email' : }
-    return render(request,'frontend/SellerRegistration.html')
+    try:
+        token = request.session['user_token']
+        user_email = token["user"]["email"]
+        user_name = token["user"]["name"]
+        context = {'loggedin':True,'email' : user_email, 'states': States.STATE_UT, 'categories': categories}
+    except:            
+        categories = ProductCategory.objects.all()    
+        context = {'loggedin':True,'email' : '', 'states': States.STATE_UT, 'categories': categories}
+
+    return render(request,'frontend/SellerRegistration.html',context)
 
 
 def Products(request,type):

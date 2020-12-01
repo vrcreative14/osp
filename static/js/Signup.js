@@ -37,118 +37,117 @@ const Register = () => {
         "mobile" : mobile_no,
         "otp" : otpvalue
     })
-    postJSON('http://www.vcnity.online/api/register/', jsonbody)    
+    postJSON('http://127.0.0.1:8000/api/register/', jsonbody)    
 }
 
 
-const postJSON = (url, jsonBody) => {
+// const postJSON = (url, jsonBody) => {
 
-    fetch(url,{ 
-        method : 'POST',
-        headers: {
-        'Accept': "application/json, text/plain, */*",
-        'Content-Type': 'application/json',     
-        'Accept-Encoding':'gzip,deflate,br',      
-        },
-        body: jsonBody
-    }
-  )
-        .then(response => {
-            if(!response.ok){
-            console.log(response)
-            response.text().then(text => {
-                DisplayMessage('','Some Error Occurred. Please try again after some time.', false)
-            })
-            // if(response.status == 400 || response.statusText == 'Bad Request'){
-            //     let msg = 'Email Id or Phone Number already exists'
-            //     document.getElementById('msg-heading').innerText = msg;            
-            //     document.getElementById('msg-heading').className = 'errormsg';
-            //     document.getElementById('msg-heading').style.display = 'block';
-            // }
-            //throw Error(response.statusText)
-            }
-            else{
-                 return response.json()
-                // console.log(response)
-                // let msg = 'You have been Registered Successfully'
-                // OpenMobileVerification()
-                //  document.getElementById('modalmsg').innerText = msg;            
-                //  document.getElementById('sellermodal').style.display = 'block';
-                //  document.getElementById('msg-heading').style.display = 'none';
-                //  if(mobile_no == ''){
-                //  document.getElementById('phoneVerification').display='none';
-                //  document.getElementById('phoneVerification').display='none';
-                //  }
-            }       
-        })
-        .then(data => {
-            console.log(data)
-            ShowResult(data);
-        })
-        .catch(error => console.log(error))
+//     fetch(url,{ 
+//         method : 'POST',
+//         headers: {
+//         'Accept': "application/json, text/plain, */*",
+//         'Content-Type': 'application/json',     
+//         'Accept-Encoding':'gzip,deflate,br',      
+//         },
+//         body: jsonBody
+//     }
+//   )
+//         .then(response => {
+//             if(!response.ok){
+//             console.log(response)
+//             response.text().then(text => {
+//                 DisplayMessage('','Some Error Occurred. Please try again after some time.', false)
+//             })
+//             // if(response.status == 400 || response.statusText == 'Bad Request'){
+//             //     let msg = 'Email Id or Phone Number already exists'
+//             //     document.getElementById('msg-heading').innerText = msg;            
+//             //     document.getElementById('msg-heading').className = 'errormsg';
+//             //     document.getElementById('msg-heading').style.display = 'block';
+//             // }
+//             //throw Error(response.statusText)
+//             }
+//             else{
+//                  return response.json()
+//                 // console.log(response)
+//                 // let msg = 'You have been Registered Successfully'
+//                 // OpenMobileVerification()
+//                 //  document.getElementById('modalmsg').innerText = msg;            
+//                 //  document.getElementById('sellermodal').style.display = 'block';
+//                 //  document.getElementById('msg-heading').style.display = 'none';
+//                 //  if(mobile_no == ''){
+//                 //  document.getElementById('phoneVerification').display='none';
+//                 //  document.getElementById('phoneVerification').display='none';
+//                 //  }
+//             }       
+//         })
+//         .then(data => {
+//             console.log(data)
+//             ShowResult(data);
+//         })
+//         .catch(error => console.log(error))
+// }
 
-}
+// const ShowResult = (data) => {
+//     var detail = data.detail
+//         switch(data.detail){
+//             case 'An SMS with an OTP(One Time Password) has been sent <br/> to your Mobile number':                
+//                 OpenMobileVerification();
+//                 DisplayMessage('',data.detail,data.status)
+//                 document.querySelector('#mobileField').classList.add('hidden')
+//                 document.querySelector('#signupBtn').classList.add('hidden')
+//                // OpenSignupForm()
+//                 break;
 
-const ShowResult = (data) => {
-    var detail = data.detail
-        switch(data.detail){
-            case 'An SMS with an OTP(One Time Password) has been sent <br/> to your Mobile number':                
-                OpenMobileVerification();
-                DisplayMessage('',data.detail,data.status)
-                document.querySelector('#mobileField').classList.add('hidden')
-                document.querySelector('#signupBtn').classList.add('hidden')
-               // OpenSignupForm()
-                break;
-
-            case 'Either phone or otp was not received':
-                DisplayMessage('Required Data missing',data.detail,data.status)
-                break;
+//             case 'Either phone or otp was not received':
+//                 DisplayMessage('Required Data missing',data.detail,data.status)
+//                 break;
             
-            case 'User registered successfully':
-                //DisplayMessage('Required Data missing',data.detail,data.status)
-                document.getElementById('otpVerificationDiv').style.display = 'none';    
-                $('.ui.modal').modal('show');
-                setTimeout(() => {  window.open('/','_self') }, 3000);
+//             case 'User registered successfully':
+//                 //DisplayMessage('Required Data missing',data.detail,data.status)
+//                 document.getElementById('otpVerificationDiv').style.display = 'none';    
+//                 $('.ui.modal').modal('show');
+//                 setTimeout(() => {  window.open('/','_self') }, 3000);
 
-            case 'OTP matched':
-               // document.getElementById('otpmatchedIcon').style.display = 'inline';
+//             case 'OTP matched':
+//                // document.getElementById('otpmatchedIcon').style.display = 'inline';
 
-                DisplayMessage('','Excellent! OTP Matched',data.status)
-                OpenSignupForm()
-                document.querySelector('#signupBtn').classList.remove('hidden')
-                document.querySelector('#changemobileBtn').classList.remove('hidden')
-                document.querySelector('#otpVerificationDiv').classList.add('hidden')
-                document.querySelector('#otpVerificationDiv').classList.add('hidden')
-                document.querySelector('#invalidPhoneLabel').classList.remove('red')
-                document.querySelector('#invalidPhoneLabel').classList.add('green')
-                document.querySelector('#invalidPhoneLabel').style.display = 'inline'
-                document.querySelector('#invalidPhoneLabel').innerText = 'Verified through OTP'
-                window.scrollBy(0, -300);
+//                 DisplayMessage('','Excellent! OTP Matched',data.status)
+//                 OpenSignupForm()
+//                 document.querySelector('#signupBtn').classList.remove('hidden')
+//                 document.querySelector('#changemobileBtn').classList.remove('hidden')
+//                 document.querySelector('#otpVerificationDiv').classList.add('hidden')
+//                 document.querySelector('#otpVerificationDiv').classList.add('hidden')
+//                 document.querySelector('#invalidPhoneLabel').classList.remove('red')
+//                 document.querySelector('#invalidPhoneLabel').classList.add('green')
+//                 document.querySelector('#invalidPhoneLabel').style.display = 'inline'
+//                 document.querySelector('#invalidPhoneLabel').innerText = 'Verified through OTP'
+//                 window.scrollBy(0, -300);
                
-                break;
-            default:                
-                DisplayMessage('',data.detail,data.status)
+//                 break;
+//             default:                
+//                 DisplayMessage('',data.detail,data.status)
 
-        }
-}
+//         }
+// }
 
-const DisplayMessage = (heading,detail, status) =>{
-    if(status==true){
+// const DisplayMessage = (heading,detail, status) =>{
+//     if(status==true){
         
-    document.querySelector('.showMessage').classList.remove('error') ;
-    document.querySelector('.showMessage').classList.add('success') ;
-    }
-    else{
+//     document.querySelector('.showMessage').classList.remove('error') ;
+//     document.querySelector('.showMessage').classList.add('success') ;
+//     }
+//     else{
         
-    document.querySelector('.showMessage').classList.remove('success') ;
-    document.querySelector('.showMessage').classList.add('error') ;
-    }
+//     document.querySelector('.showMessage').classList.remove('success') ;
+//     document.querySelector('.showMessage').classList.add('error') ;
+//     }
 
-    document.querySelector('.showMessage').style.display='block'
-    document.querySelector('.showMessage>div').innerText = heading
-    document.querySelector('.showMessage>p').innerHTML = detail     
+//     document.querySelector('.showMessage').style.display='block'
+//     document.querySelector('.showMessage>div').innerText = heading
+//     document.querySelector('.showMessage>p').innerHTML = detail     
 
-}
+// }
 
 
 const OpenSignupForm = () => {
@@ -184,15 +183,15 @@ function SendOTP() {
     //     "first_name": name,   
     // })
 
-    var signupUrl = "http://www.vcnity.online/api/seller/register/"
+    var signupUrl = "http://127.0.0.1:8000/api/seller/register/"
 
     var otpInfo = JSON.stringify({                
                  "phone": mobile_no,
                  });
     debugger;
-    var result =  postJSON('http://www.vcnity.online/api/send_mobile_otp/', otpInfo)
+    var result =  postJSON('http://127.0.0.1:8000/api/send_mobile_otp/', otpInfo)
     
-//         fetch('http://www.vcnity.online/api/send_mobile_otp/',{ 
+//         fetch('http://127.0.0.1:8000/api/send_mobile_otp/',{ 
 //         method : 'POST',
 //         headers: {
 //         'Accept': "application/json, text/plain, */*",
@@ -412,18 +411,21 @@ var otp1 = document.getElementById("otpMobile1"),
     otp3 = document.getElementById("otpMobile3"),
     otp4 = document.getElementById("otpMobile4");
     
-
+if(otp1 !== null)
         otp1.onkeyup = function() {
         if (this.value.length === parseInt(this.attributes["maxlength"].value)) {
             otp2.focus();
         }
     }
 
+if(otp2 !== null)
     otp2.onkeyup = function() {
         if (this.value.length === parseInt(this.attributes["maxlength"].value)) {
             otp3.focus();
         }
     }
+
+if(otp3 !== null)
     otp3.onkeyup = function() {
         if (this.value.length === parseInt(this.attributes["maxlength"].value)) {
             otp4.focus();
@@ -446,7 +448,7 @@ const CheckOTP = () => {
         "mobile" : mobile_no,
         "otp" : otpvalue
     })
-    postJSON('http://www.vcnity.online/api/validate_mobile_otp/', jsonbody)    
+    postJSON('http://127.0.0.1:8000/api/validate_mobile_otp/', jsonbody)    
 }
 
 var OpenEmailInput=() => {
