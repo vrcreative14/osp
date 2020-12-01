@@ -37,7 +37,7 @@ const Register = () => {
         "mobile" : mobile_no,
         "otp" : otpvalue
     })
-    postJSON('http://127.0.0.1:8000/api/register/', jsonbody)    
+    postJSON('http://www.vcnity.online/api/register/', jsonbody)    
 }
 
 
@@ -183,15 +183,15 @@ function SendOTP() {
     //     "first_name": name,   
     // })
 
-    var signupUrl = "http://127.0.0.1:8000/api/seller/register/"
+    var signupUrl = "http://www.vcnity.online/api/seller/register/"
 
     var otpInfo = JSON.stringify({                
                  "phone": mobile_no,
                  });
     debugger;
-    var result =  postJSON('http://127.0.0.1:8000/api/send_mobile_otp/', otpInfo)
+    var result =  postJSON('http://www.vcnity.online/api/send_mobile_otp/', otpInfo)
     
-//         fetch('http://127.0.0.1:8000/api/send_mobile_otp/',{ 
+//         fetch('http://www.vcnity.online/api/send_mobile_otp/',{ 
 //         method : 'POST',
 //         headers: {
 //         'Accept': "application/json, text/plain, */*",
@@ -448,7 +448,7 @@ const CheckOTP = () => {
         "mobile" : mobile_no,
         "otp" : otpvalue
     })
-    postJSON('http://127.0.0.1:8000/api/validate_mobile_otp/', jsonbody)    
+    postJSON('http://www.vcnity.online/api/validate_mobile_otp/', jsonbody)    
 }
 
 var OpenEmailInput=() => {
