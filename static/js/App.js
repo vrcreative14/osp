@@ -1,32 +1,73 @@
 
-var x = document.getElementById("demo");
+
+function getCoordinates() {
+    debugger
+    var locat = document.getElementById("storelocation")
+      if (navigator.geolocation) {
+       location =  navigator.geolocation.getCurrentPosition();
+
+      } else {
+        document.getElementsByClassName('showMessage').innerHTML = "Geolocation is not supported by this browser.";
+      }
+    }
+
+
 function getLocation() {
+  var locat = document.getElementById("storelocation")
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(showPosition);
   } else {
-    x.innerHTML = "Geolocation is not supported by this browser.";
+    document.getElementsByClassName('showMessage').innerHTML = "Geolocation is not supported by this browser.";
   }
 }
 
-function showPosition(position) {
+function showPosition(position) {    
     debugger;
-    getLocation();
-    fetchLocationName(position);
-  x.placeholder = "Latitude: " + position.coords.latitude +
-  "<br>Longitude: " + position.coords.longitude;
+    //getLocation();
+  fetchLocationName(position);
+  //l.placeholder = "Latitude: " + position.coords.latitude +
+  //"<br>Longitude: " + position.coords.longitude;
+  document.getElementById('latitude').value = position.coords.latitude
+  document.getElementById('longitude').value = position.coords.longitude
 }
 
 function fetchLocationName(position){
-    fetch('http://apis.mapmyindia.com/advancedmaps/v1/99gsfvaspt7kg4nz13g3hg1bvsvkx48j/rev_geocode?lat=position.coords.latitude&lng=position.coords.longitude',{
+    const proxyurl = "https://cors-anywhere.herokuapp.com/";
+    const url = `http://apis.mapmyindia.com/advancedmaps/v1/99gsfvaspt7kg4nz13g3hg1bvsvkx48j/rev_geocode?lat=${position.coords.latitude}&lng=${position.coords.longitude}`;
+    fetch(proxyurl+url ,{
         method:'GET',
         headers:{            
-            'X-CSRFToken':csrftoken,
+            'X-CSRFToken': csrftoken,
+            "Access-Control-Allow-Origin" : "*" ,
+            "Access-Control-Allow-Headers" : "Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With" ,
+            'csrfmiddlewaretoken':  csrftoken ,
         },
     })
     .then(response => response.json())
     .then(function(data){
         console.log(data)
+        document.getElementById('saveLocation').value = JSON.stringify(data.results[0])
+        let currentEvent = document.getElementById('currentEvent').value
+       // FillAddress(data.results[0])
+       switch(currentEvent){
+       case  'detectLocation' :
+        FillCitynPin(data.results[0])
+           break;
+        case 'detect-location':
+            FillAddress(data.results[0])
+       default:
+           break;
+       }
+      
     })
+}
+
+function DetectLocation(data){
+    var locationInput = document.querySelector('#locationInput')
+    if(locationInput != null){
+        locationInput.value = data["pincode"]
+    }
+
 }
 
 function openNav() {
@@ -45,7 +86,7 @@ var wrapper = document.getElementById('storeListDiv')
  console.log('fetching....')
   fetch('http://127.0.0.1:8000/api/store-list/', {
       method:'GET',              
-  }) 
+  })
   .then(response => response.json())
   .then(function(data){
       console.log(data)
@@ -150,23 +191,22 @@ function getCookie(name) {
 }
 
 
-
-
-
-
 function openTab (tabName)  {
 debugger;
+var activeLink = document.getElementsByClassName('item step active')
+activeLink[0].classList.remove('active')
+let link = tabName + 'Link'
+document.getElementById(link).classList.add('active')
 var a = document.querySelector('.ui.tab.active')
 if (a !== null)
     document.querySelector('.ui.tab.active').classList.remove('active');
 
 document.querySelector(`[name=${CSS.escape(tabName)}]`).classList.add('active');
+
 }
 
 
 const csrftoken=getCookie('csrftoken');
-
-
 
 // Next/previous controls
 function plusSlides(n) {
@@ -179,14 +219,21 @@ function currentSlide(n) {
 }
 
 window.onload = function(){
-    if (getCookie('tkl')){
-
-    }
+    var tkl = getCookie('tkl')
     debugger
-    var headerLinks=document.querySelectorAll('.navbar>a')
+    if (tkl == undefined || tkl == ''){
+        var headerLinks=document.querySelectorAll('.navbar > .signedout')
+        for(let i=0;i<headerLinks.length;i++){
+            headerLinks[i].classList.remove('hidden')
+        }
+    }
+  
+    else {
+    var headerLinks=document.querySelectorAll('.navbar > .signedin')
     for(let i=0;i<headerLinks.length;i++){
         headerLinks[i].classList.remove('hidden')
     }
+}
 }
 
 function getCookie(cname) {
@@ -204,4 +251,36 @@ function getCookie(cname) {
       }
     }
     return "";
+}
+
+function FetchCitynPin(event){
+    document.getElementById('detectLocation').classList.add('loading')
+    document.getElementById('currentEvent').value = event.target.id
+
+    debugger
+    let location = ""
+    getLocation()
+    // location = JSON.parse(document.getElementById('saveLocation').value)
+    // if(location != "" && location !== undefined) {       
+    //     FillCitynPin(location)    
+    // }   
+    
+   // else
+   // DisplayMessage('', 'Not able to detect location at this time' ,false)
+   
+}
+
+function FillCitynPin(data){
+    let pin = data["pincode"] 
+    let city = data["city"]
+    let area = data["subLocality"]
+    document.getElementById('locationCity').value = city + " , " + area
+    document.getElementById('locationPin').value = pin
+    document.getElementById('detectLocation').classList.remove('loading')
+}
+
+function ShowMessageBar() {
+    var x = document.getElementById("messagebar");
+    x.className = "show";
+    setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
   }

@@ -9,17 +9,20 @@
     <title>Page Title</title>
     <meta name='viewport' content='width=device-width, initial-scale=1'>
     <link rel='stylesheet' type='text/css' media='screen' href='App.css'>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.10/semantic.min.css">
     <script src="{% static 'js/App.js' %}"></script>
 </head>
 <body>
     {% block content %}
-
+    <input type="hidden" id="latitude" value="" />
+    <input type="hidden" id="longitude" value="" />
+    
     <div class="centeredDiv headingDiv">        
       <span class="headingSpan" style="font-weight: 500;color: #fff;"> Providing the below details will help us to create your online Store and help customers reach you efficiently !</span>
-  </div>
+   </div>
     <div class="">
-        <div class="ui steps tabular menu">
-            <a class="item step active" data-id="sellerInfoTab" data-tab="sellerInfo" onclick="openTab('sellerInfo')">
+        <div class="ui ordered two steps tabular menu">
+            <a id="sellerInfoLink" class="item step active" data-id="sellerInfoTab" data-tab="sellerInfo" onclick="openTab('sellerInfo')">
               <i class="user plus icon"></i>
               <div class="content">
                 <div class="title">Register as a Seller</div>
@@ -27,7 +30,7 @@
               </div>
             </a>
 
-            <a class="item step" data-tab="storeInfo" onclick="openTab('storeInfo')">
+            <a id="storeInfoLink" class="item step" data-tab="storeInfo" onclick="openTab('storeInfo')">
               <i class="payment icon"></i>
               <div class="content">
                 <div class="title">Store/Shop Information</div>
@@ -35,13 +38,16 @@
               </div>
             </a>
 
-            <a class="item step" data-tab="taxInfo">
+            <!-- <a class="item step" data-tab="taxInfo">
               <i class="info icon"></i>
               <div class="content">
                 <div class="title">Confirm Order</div>
               </div>
-            </a>
+            </a> -->
           </div>
+
+          {% include 'Message.html' %}
+
 
           <div id="sellerInfo" name="sellerInfo" class="ui tab active" data-tab="sellerInfo">            
             <form class="ui form">
@@ -49,14 +55,19 @@
                 <div class="ui header centeredDiv formheadingDiv">
                   <span class="formheadingSpan"> Seller Contact Information </span>
                  </div>
-                <div class="field">
+                <div class="required inline field">
                   <label>Enter your Full Name as per the Official Identity Card</label>
-                  <div class="two fields">
+                  <span id="nameerrorLabel" class="ui left pointing red basic label promptLabel" style="display: none;">Enter your full name as per legal Identity Card</span>             
+                  <div class="three fields">
                     <div class="field">
-                      <input type="text" name="shipping[first-name]" placeholder="First Name">
+                      <input id="firstname" type="text" name="firstname" placeholder="First Name">
+                      
                     </div>
                     <div class="field">
-                      <input type="text" name="shipping[last-name]" placeholder="Last Name">
+                      <input id="middlename" type="text" name="middlename" placeholder="Middle Name (If any)">
+                    </div>
+                    <div class="field">
+                      <input id="lastname" type="text" name="lastname" placeholder="Last Name">
                     </div>
                   </div>
                 </div>
@@ -65,58 +76,61 @@
                   <div class="fields">
                     <div class="four wide field">
                       <div class="required inline field">
-                        <label>Primary Email</label>  
-                       
+                        <label>Primary Email</label>    
+                        <span id="emailerrorLabel" class="ui left pointing red basic label promptLabel" style="display: none;">Enter a valid Email Id</span>                        
                       </div>
+
                         <div class="">
-                          <input type="email" name="email" id="emailInput" placeholder="Enter Your Email Id"  onchange="validateEmail()" maxlength="55" value="{{email}}">
+                          <input type="email" name="primaryemail" id="email" placeholder="Enter Your Email Id"  onchange="validateEmail()" maxlength="55" value="{{email}}">
                         </div>   
                     </div>
-                    <div class="four wide field">
+                    <div class="six wide field">
                       <div class="required inline field">
                         <label> Primary Mobile number </label>  
-                       
+                        <span id="mobileerrorLabel" class="ui left pointing red basic label promptLabel" style="display: none;">Enter a valid Mobile number</span>                        
+                       <div class="inline field">
+                        <input class="ui mini" style="width: 55px;margin-right: 0px;" placeholder="+91" readonly></input>   
+                        <input type="text" name="primarymobile" id="mobile" placeholder="Enter Your Primary Mobile number" onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))" maxlength="10" style="width: 265px;">
+                       </div>
                       </div>
-                      <div class="">
-                      <input type="text" name="shipping[address-2]" placeholder="Enter Your Primary Mobile number">
-                      </div>
-                    </div>
                    
+                  
+                    
+                    </div>                   
                   </div>
                 </div>
                 <div class="two fields">
                   <div class="four wide field">
                     <div class="inline field">
-                      <label >Secondary Email (Optional)</label>  
+                      <label> Secondary Email (Optional) </label>  
                      
                     </div>
                     <div class="">
-                    <input type="text" name="shipping[address-2]" placeholder="Enter Your Primary Mobile number">
+                    <input type="text" id="secondaryemail" name="secondaryemail" placeholder="Enter Your secondary email">
                     </div>
                   </div>
-                  <div class="four wide field">
+                  <div class="five wide field">
                     <div class="inline field">
-                      <label> Secondary Mobile number (Optional)</label>  
-                     
-                    </div>
-                    <div class="">
-                    <input type="text" name="shipping[address-2]" placeholder="Enter Your Primary Mobile number">
-                    </div>
-                  </div>
+                      <label> Secondary Mobile number (Optional)</label>                       
                   
-                </div>              
-             
-               
+                    
+                  <div class="inline field">
+                    <input class="ui mini" style="width: 55px;margin-right: 0px;" placeholder="+91" readonly></input>   
+                    <input type="text" id="secondarymobile" name="secondarymobile" placeholder="Enter Your secondary Mobile number" onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))" maxlength="10" style="width: 265px;">
+                  </div>
+                  </div>
+                  </div>                  
+                </div>                                      
               </form>    
+
               <div class="centeredDiv">
-                <button class="ui button successBtn submitBtn formheadingSpan">Save & Next</button>
+                <button class="ui button successBtn submitBtn formheadingSpan" onclick="SaveSellerInfo()">Save & Next</button>
               </div>              
           </div>
 
 
-          <div name="storeInfo" class="ui tab" data-tab="storeInfo">
-            
-            <form class="ui form">
+          <div name="storeInfo" class="ui tab" data-tab="storeInfo">            
+            <form class="ui form segment">
                 <div class="ui header centeredDiv formheadingDiv">
                  <span class="formheadingSpan"> Shop & Organization Details </span>
                 </div>
@@ -124,53 +138,76 @@
                   <div class="fields">
                   
                     <div class="four wide required field">
-                      <label class="">Enter Name of your Shop</label>
-                      <input type="text" name="shipping[first-name]" placeholder="Shop/Store Name">
+                      <label class="">Enter Name of your Shop</label>                  
+                      <input type="text" name="" placeholder="Shop/Store Name" id="shopname">
+                      <span id="shopnameerrorLabel" class="ui top pointing red basic label promptLabel" style="display: none;">Enter your Shop name for store creation</span>             
                     </div>
                    
-                    <div class="six wide required field">
-                      <label class="">Choose Product Category (You may choose multiple items found in your Shop)</label>
-                      <select class="ui dropdown">
-                        <option value="0">Select Product Categories</option>
-                        {% for category in categories %}
-
-                        <option value="{{state}}">{{category}}</option>
-
-                        {% endfor %}                   
+                    <div class="eight wide required field">
+                      <label class="">Choose Product Category (You may search & choose multiple categories from the below given menu)</label>
+                      <select name="productCategories" id="productcategory" multiple="" class="ui fluid search selection dropdown" onchange="CheckProductCategory()">
+                      <option value="0" disabled>Select Product Categories you deal with</option>
+                        {% for category in categories %}    
+                        <option value="{{category}}">{{category}}</option>    
+                        {% endfor %}        
+                      <!-- <option value="0" disabled>Select Product Categories you deal with</option>            -->
                       </select>
-                    </div>
-                  </div>
-              
+                      <span id="productcategoryerrorLabel" class="ui top pointing red basic label promptLabel" style="display: none;">Choose Product categories you deal with for store creation</span>             
+                    </div>                  
 
+                   
+
+                  </div>
+                  <div class="six wide field hidden"> 
+                   <input type="text" class="largeInput " id="describe-category" placeholder="Describe the product category in which you deal. In case of multiple categories separate them with comma."></input>
+                 </div>
+                  <div class="fields">
+                    <div class="eight wide required field">
+                    <label>Choose Store Category from below options.</label>
+                    <select name="productCategories" id="storecategory" class="ui fluid search selection dropdown" multiple="">
+                      <option value="0" disabled>Select your Store Category</option>
+                        {% for category in store_categories %}    
+                        <option value="{{category}}">{{category}}</option>    
+                        {% endfor %}                           
+                      </select>
+                      <span id="storecategoryerrorLabel" class="ui top pointing red basic label promptLabel" style="display: none;"> Choose Sub-categories from the list </span>             
+                  </div>
+                  </div>
+                  <br/>
                
                  <div class="fields">
                     <div class="four wide inline required field">
                        <label class="">Is Your Shop registered under GST ?</label>
                     </div>
                     <div class=" inline field">
-                    <input type="radio" name="isgstregisterd" value="1" onclick="CheckGSTINEntry(this.value)" > <label>Yes</label>
+                    <input type="radio" name="isgstregistered" value="1" onclick="CheckGSTINEntry(this.value)" > <label>Yes</label>
                     </div>
                     <div class="inline field">
-                    <input type="radio" name="isgstregisterd" value="0" onclick="CheckGSTINEntry(this.value)"> <label>No</label>
+                    <input type="radio" name="isgstregistered" value="0" onclick="CheckGSTINEntry(this.value)"> <label>No</label>
                     </div>
+                   
                     <div class="four wide field"> 
-
+                      <span id="isgstregisterederrorLabel" class="ui left pointing red basic label promptLabel" style="display: none;">Choose whether your shop is registered undet GST or not</span>             
                     </div>
                     <div class="inline field">
                       <!-- <div class=""> -->
                     <label>Why is it necessary to provide GSTIN number at vcnity.online ?</label>
                      <!-- </div> -->
                     </div>
-  
+                    
+                  
+
                  </div>
-                
+            
             
                 <div class="field">
                  <div class="fields">
-                   <div class="four wide required field hidden gstinEntry">
-                       <label>Enter your 15 digit GSTIN number</label>
-                       <input placeholder="" onkeyup="checkGSTIN()">
+                   <div class="ten wide required inline field hidden gstinEntry">                   
+                       <label>Enter your 15 digit GSTIN </label>                     
+                       <input placeholder="" onkeyup="checkGSTIN()" id="gstin">
+                       <span id="gstinerrorLabel" class="ui left pointing red basic label promptLabel" style="display: none;">Enter a valid GSTIN under which your business is registered </span>             
                   </div>
+                
                    <!-- <div class="inline field">
                    <input type="radio"> <label>Yes</label>
                   </div>
@@ -181,63 +218,91 @@
 
 
                 </div>
+               
                 <br/>
+                <div class="fields">
+                 <div class="twelve wide inline field">
+                 <h4 class="ui dividing header">Upload a Picture of your shop (Optional)</h4>
+             <br/>
+                 <div class="six wide inline field">              
+                   <input type="file" id="storeimage" name="storepic" style="width: 500px;">
+                 </div>
+               </div>
+               </div>
 
                 <div class="ui header centeredDiv formheadingDiv">
                   <span class="formheadingSpan"> Shop/Store Location (Required for correspondence and pickup of items) </span>
                  </div>
                
                 <br/>
-                <div class="fields">
-                
+           
+                 <div class="fields">
+                  <div class="eight wide field ">                       
+                    <a id="detect-location" class="ui blue button" onclick="FetchFillLocation(event)"> Allow Location Detection</a>  
+                    <li>Choose this if your current location is same as your Shop's location</li>            
+                    <li>We will save your shop location to reach customers at your shop efficiently</li>            
+                    <br/>
+                    <span id="locationmessage" class="ui top pointing green large basic label promptLabel" style="display: none;">Fetched Location. Make changes accordingly to make the address accurate.</span>             
+                  </div>
+                 </div>
+
+                <div class="fields">                
                   <div class="four wide required field">
                     <label>State</label>
-                    <select class="ui dropdown">
-                      <option value="0">Select State</option>
-                      {% for state in states %}
-                      
+                    <select class="ui dropdown" id="state">
+                      <option value="">Select State</option>                     
+                      {% for state in states %}                                  
                       <option value="{{state}}">{{state}}</option>
-                      {% endfor %}
-                 
+                      {% endfor %}                 
                     </select>
+                    <span id="stateerrorLabel" class="ui top pointing red basic label promptLabel" style="display: none;">Select state in which your Shop is located</span>             
                   </div>
 
                  
                   <div class="four wide required field">
                          <label>City</label>
-                      <input placeholder="Enter the city in which Shop is Located">                
+                      <input placeholder="Enter the city in which Shop is Located" id="city">    
+                      <span id="cityerrorLabel" class="ui top pointing red basic label promptLabel" style="display: none;">Enter city in which Shop is located</span>                       
                   </div>
 
 
                   
                   <div class="three wide required field">     
-                    <label>Pincode </label>               
-                    <input type="text" name="pincode" placeholder="Pincode of your Shop">
+                    <label> Pincode </label>               
+                    <input type="text" name="pincode" placeholder="Pincode of your Shop" id="pincode" maxlength="6" onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))">
+                    <span id="pincodeerrorLabel" class="ui top pointing red basic label promptLabel" style="display: none;">Enter pincode for your Shop</span>    
                   </div>
-                 
+
+                  <div class="two wide required field hidden">     
+                    <label> Latitude </label>               
+                    <input type="text" name="latitude"  id="latitude">
+                  </div>
+
+                  <div class="two wide required field hidden">     
+                    <label> Longitude </label>               
+                    <input type="text" name="longitude" id="longitude">
+                  </div>                             
                 </div>
+                <br/>
+
                 <div class=" fields">
                   
                   <div class="six wide field">
                       <label>Address (Details like Shop Number, Market name etc.)</label>
-                      <input placeholder="Enter the city in which Shop is Located">                
+                      <input placeholder="Enter address for your Shop" id="address">                            
                   </div>
 
                   <div class="four wide field">
                       <label>Nearest Landmark</label>
-                      <input placeholder="Enter the city in which Shop is Located">                
-                  </div>
-
-                
+                      <input placeholder="Enter the landmark situated near your shop" id="landmark">                
+                  </div>                
                 </div>                                   
               </form>
                     <div class="centeredDiv">
-
-                      <button class="ui button successBtn submitBtn formheadingSpan">Save & Next</button>
+                      <button class="ui button successBtn submitBtn formheadingSpan" onclick="SaveStoreInfo()">Save & Next</button>
                     </div>
           </div>
-
-
+        
           <div name="taxInfo" class="ui tab" data-tab="taxInfo">
             
             <form class="ui large form">
@@ -249,6 +314,13 @@
 
         </div>
         <script src="{% static 'js/Seller.js' %}"></script>
+        <script src="{% static 'js/Misc.js' %}"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.10/semantic.js"></script>
+        <script>
+            $('#storecategory').dropdown()            
+            $('#productcategory').dropdown()            
+        </script>
     {% endblock %}
 </body>
 </html>

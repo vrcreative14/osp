@@ -3,7 +3,7 @@ from accounts.models import User
 from rest_framework.authtoken.models import Token
 from accounts.models import Seller
 from django.contrib.auth import authenticate
-from stores.models import Store, StoreCategory, StoreSubcategory
+from stores.models import Store,StoreDetails, StoreCategory, StoreSubcategory
 from django.contrib.auth import login
 
 
@@ -65,11 +65,11 @@ class StoreSubCategorySerializer(serializers.ModelSerializer):
 class StoreSerializer(serializers.ModelSerializer):
     store_category = StoreCategorySerializer(read_only = True, many=True)
     store_subcategory = StoreSubCategorySerializer(read_only = True, many=True)
-    seller = SellerSerializer(read_only = True, many=True)
+    #seller = SellerSerializer(read_only = True, many=True)
     print(serializers.ModelSerializer)
     class Meta:
         model = Store
-        fields=('seller_id','seller','name','state','city','pincode','store_category','store_subcategory')
+        fields=('seller','name','state','city','pincode','latitude','longitude','store_category','store_subcategory','storeimage')
 
     # def create(self, validated_data):
     #     #email = validated_data.pop('seller')
@@ -142,7 +142,7 @@ class LoginSerializer(serializers.Serializer):
     def validate(self, attrs):
         print(attrs)
         email = attrs.get('email')      
-        password = attrs.get('password')
+        password = attrs.get('pft')
 
         if email and password:
             if User.objects.filter(email = email).exists():
@@ -202,6 +202,10 @@ class StorSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class StoreDetailsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = StoreDetails
+        fields = '__all__'
 
 
 # # Login Serializer

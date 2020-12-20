@@ -1,5 +1,6 @@
 from django.db import models
 from accounts.models import Seller
+from django.utils.translation import gettext_lazy as _
 
 # Create your models here.
 
@@ -13,10 +14,10 @@ class CompanyType(models.Model):
 class Organization(models.Model):
     seller = models.ForeignKey(Seller, on_delete=models.CASCADE)
     name = models.CharField(max_length=50)
-    is_registered = models.BooleanField()
+    is_registered = models.BooleanField(default=False, blank=True, null=True)
     company_type = models.ForeignKey(CompanyType, on_delete=models.SET_DEFAULT, default=1)
-    is_gst_registered = models.BooleanField()
-    gstin = models.CharField(max_length=15 , blank=True)
+    # is_gst_registered = models.BooleanField()
+    # gstin = models.CharField(max_length=15 , blank=True, null=True)
 
     def __str__(self):
         return self.name
@@ -29,6 +30,15 @@ class Popularity(models.Model):
     class Meta:
         verbose_name_plural='Popularity'
 
+class ProductCategory(models.Model):
+       
+       name = models.CharField(max_length=50, unique=True)
+
+       class Meta:
+           verbose_name_plural = 'ProductCategories'
+
+       def __str__(self):
+           return self.name
 
 class StoreCategory(models.Model):
     name = models.CharField(max_length=50)
@@ -60,16 +70,16 @@ class States(models.Model):
     STATE_UT = (
         ('Andaman and Nicobar Islands'),
         ('Andhra Pradesh'),
-        ('Arunachal Pradesh'),
-        ('Assam'),
-        ('Bihar'),
-        ('Chandigarh'),
-        ('Chhattisgarh'),
-        ('Dadra and Nagar Haveli'),
-        ('Daman and Diu'),
-        ('Delhi'),
+        ( 'Arunachal Pradesh'),
+        ( 'Assam'),
+        ( 'Bihar'),
+        ( 'Chandigarh'),
+        ( 'Chhattisgarh'),
+        ( 'Dadra and Nagar Haveli'),
+        ( 'Daman and Diu'),
+        ( 'Delhi'),
         ( 'Goa'),
-        ('Gujarat'),
+        ( 'Gujarat'),
         ( 'Haryana'),
         ( 'Himachal Pradesh'),
         ( 'Jammu and Kashmir'),
@@ -106,49 +116,48 @@ class StoreManager(models.Model):
         return str(self.name)
 
 
-
 class Store(models.Model):
     
     STATE_UT = (
-        ('AN', 'Andaman and Nicobar Islands'),
-        ('AP', 'Andhra Pradesh'),
-        ('AR', 'Arunachal Pradesh'),
-        ('AS', 'Assam'),
-        ('BR', 'Bihar'),
-        ('CH', 'Chandigarh'),
-        ('CG', 'Chhattisgarh'),
-        ('DH', 'Dadra and Nagar Haveli'),
-        ('CG', 'Daman and Diu'),
-        ('DL', 'Delhi'),
-        ('GA', 'Goa'),
-        ('GJ', 'Gujarat'),
-        ('HR', 'Haryana'),
-        ('HP', 'Himachal Pradesh'),
-        ('JK', 'Jammu and Kashmir'),
-        ('JH', 'Jharkhand'),
-        ('KA', 'Karnataka'),
-        ('KL', 'Kerala'),
-        ('LD', 'Lakshadweep'),
-        ('MP', 'Madhya Pradesh'),
-        ('MH', 'Maharashtra'),
-        ('MN', 'Manipur'),
-        ('ML', 'Meghalaya'),
-        ('MZ', 'Mizoram'),
-        ('NL', 'Nagaland'),
-        ('OR', 'Orissa'),
-        ('PY', 'Pondicherry'),
-        ('PB', 'Punjab'),
-        ('RJ', 'Rajasthan'),
-        ('SK', 'Sikkim'),
-        ('TN', 'Tamil Nadu'),
-        ('TR', 'Tripura'),
-        ('UK', 'Uttarakhand'),
-        ('UP', 'Uttar Pradesh'),
-        ('WB', 'West Bengal'),         
+        ('Andaman and Nicobar Islands', 'Andaman and Nicobar Islands'),
+        ('Andhra Pradesh', 'Andhra Pradesh'),
+        ('Arunachal Pradesh', 'Arunachal Pradesh'),
+        ('Assam', 'Assam'),
+        ('Bihar', 'Bihar'),
+        ('Chandigarh', 'Chandigarh'),
+        ('Chhattisgarh', 'Chhattisgarh'),
+        ('Dadra and Nagar Haveli', 'Dadra and Nagar Haveli'),
+        ('Daman and Diu', 'Daman and Diu'),
+        ('Delhi', 'Delhi'),
+        ('Goa', 'Goa'),
+        ('Gujarat', 'Gujarat'),
+        ('Haryana', 'Haryana'),
+        ('Himachal Pradesh', 'Himachal Pradesh'),
+        ('Jammu and Kashmir', 'Jammu and Kashmir'),
+        ('Jharkhand', 'Jharkhand'),
+        ('Karnataka', 'Karnataka'),
+        ('Kerala', 'Kerala'),
+        ('Lakshadweep', 'Lakshadweep'),
+        ('Madhya Pradesh', 'Madhya Pradesh'),
+        ('Maharashtra', 'Maharashtra'),
+        ('Manipur', 'Manipur'),
+        ('Meghalaya', 'Meghalaya'),
+        ('Mizoram', 'Mizoram'),
+        ('Nagaland', 'Nagaland'),
+        ('Orissa', 'Orissa'),
+        ('Pondicherry', 'Pondicherry'),
+        ('Punjab', 'Punjab'),
+        ('Rajasthan', 'Rajasthan'),
+        ('Sikkim', 'Sikkim'),
+        ('Tamil Nadu', 'Tamil Nadu'),
+        ('Tripura', 'Tripura'),
+        ('Uttarakhand', 'Uttarakhand'),
+        ('Uttar Pradesh', 'Uttar Pradesh'),
+        ('West Bengal', 'West Bengal'),         
     )
     seller = models.ForeignKey(Seller, on_delete=models.CASCADE)
     name = models.CharField(max_length=50)    
-    state = models.CharField(max_length=25, choices=STATE_UT)
+    state = models.CharField(max_length=30, choices=STATE_UT)
     city = models.CharField(max_length=30)
     pincode = models.CharField(max_length=6)
     latitude = models.CharField(max_length=20, default='26.8467° N')
@@ -156,11 +165,12 @@ class Store(models.Model):
     #owner_name = models.CharField(max_length=50)
     #email_id = models.EmailField(max_length=254)
     store_manager = models.ForeignKey(StoreManager, on_delete=models.SET_DEFAULT,default=1, blank=True)
+    product_category = models.ManyToManyField(ProductCategory)
     store_category = models.ManyToManyField(StoreCategory)
-    store_subcategory = models.ManyToManyField(StoreSubcategory)
+    #store_subcategory = models.ManyToManyField(StoreSubcategory)
     #store_category = models.ForeignKey(StoreCategory, on_delete=models.SET_DEFAULT, default=1)
     img_path = models.CharField(max_length=50,blank=True)
-    storeimage = models.ImageField(upload_to='images/store', height_field=None, blank=True)
+    storeimage = models.ImageField(_("Image"), upload_to='images/store', height_field=None, blank=True)
     #store_details = models.ForeignKey(StoreDetails, on_delete=models.CASCADE, blank=True)                    # relation with details and hence further with organization
     def __str__(self):
         return str(self.name)
@@ -178,11 +188,13 @@ class StoreDetails(models.Model):
     safety_status = models.BooleanField(default=True)
     is_parking_available = models.BooleanField(default=False)
     is_already_online = models.BooleanField(default=False)
-    popularity = models.ForeignKey(Popularity, on_delete=models.CASCADE)
-    organization = models.ForeignKey(Organization, on_delete=models.CASCADE, default=1, blank=True)
-    
+    popularity = models.ForeignKey(Popularity, on_delete=models.CASCADE, blank=True, null=True)
+    organization = models.ForeignKey(Organization, on_delete=models.CASCADE, blank=True, null=True)
+    is_gst_registered = models.BooleanField()
+    gstin = models.CharField(max_length=15 , blank=True, null=True)
     class Meta:
         verbose_name_plural='StoreDetails'
 
     def __str__(self):
         return str(self.specifications)
+

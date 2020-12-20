@@ -4,7 +4,18 @@ var isFormValid = true
 
 function checkPassword(){
     debugger;
-    let password = document.getElementById('password');  
+    let password = document.getElementById('password'); 
+    let regex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/
+    if( regex.test(String(password))){
+        //showMessage('mobileno', false)
+        isFormValid=true;
+        return true;
+   }
+   else{
+        //showMessage('mobileno', true)
+        isFormValid=false;
+        return false
+   }
     if (password.value != ''){
     document.getElementById('passwordLabel').style.display = 'none';    
     document.getElementById('password').disabled = false; 
@@ -270,10 +281,11 @@ const OpenMobileVerification = () => {
 const validateSignupForm = () => {     
     CheckName();
     let email = document.getElementById('emailInput').value;  
+
     if(validateEmail(email))
-    showMessage('email',false)       
-    else
-    showMessage('email',true)       
+         showMessage('email',false)       
+    else if(email !== '')
+         showMessage('email',true)       
     checkPassword();       
     let enteredMobile = document.getElementById('mobile_no').value;
    if (validateMobileno(enteredMobile))

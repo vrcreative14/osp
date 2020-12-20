@@ -9,7 +9,8 @@ from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 import datetime
 from stores.models import States
-from products.models import ProductCategory
+from products.models import  Garment
+from stores.models import ProductCategory, StoreCategory
 #from .forms import SellerForm
 #from api.models import Product
 # Create your views here.
@@ -77,17 +78,20 @@ def SignUp(request):
         # print('no')
         return render(request,'frontend/SignUp.html', context)
 
-login_required(login_url='/login/')
+@login_required(login_url='/login')
 def RegisterSeller(request):
-    #token = request.data.get('token', False)
+    #token = request.data.get('token', False)    
     try:
         token = request.session['user_token']
         user_email = token["user"]["email"]
         user_name = token["user"]["name"]
-        context = {'loggedin':True,'email' : user_email, 'states': States.STATE_UT, 'categories': categories}
+        categories = ProductCategory.objects.all()
+        store_category = StoreCategory.objects.all()
+        context = {'loggedin':True,'email' : user_email, 'states': States.STATE_UT, 'categories': categories, 'store_categories': store_category}
     except:            
-        categories = ProductCategory.objects.all()    
-        context = {'loggedin':True,'email' : '', 'states': States.STATE_UT, 'categories': categories}
+        categories = ProductCategory.objects.all()   
+        store_category = StoreCategory.objects.all() 
+        context = {'loggedin':True, 'email' : '', 'states': States.STATE_UT, 'categories': categories, 'store_categories': store_category}
 
     return render(request,'frontend/SellerRegistration.html',context)
 
@@ -108,7 +112,10 @@ def FetchProducts(request,type):
     #productsM = Product.objects.filter()
     #context = {'states' : states}
     #serializer=ArticleSerializer(articles, many=True)
-    return render(request,'frontend/Products.html')
+    categories = ProductCategory.objects.all()
+    article = Garment.objects.all()
+    context = {'articles' : article, 'categories': categories}
+    return render(request,'frontend/Products.html', context)
 
 
 def index(request):

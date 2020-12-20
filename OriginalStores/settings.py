@@ -156,6 +156,14 @@ STATICFILES_DIRS = [
    os.path.join(BASE_DIR, 'static')
 ]
 
+MEDIA_URL = '/images/'
+
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static')
+]
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'static/images')
+
 REST_FRAMEWORK = {    
     # 'DEFAULT_AUTHENTICATION_CLASSES': (        
     #     'rest_framework_simplejwt.authentication.JWTAuthentication',
@@ -188,5 +196,5 @@ EMAIL_HOST_USER = 'vcreative14@gmailcom'
 EMAIL_HOST_PASSWORD = 'Sona@1960'
 EMAIL_USE_TLS = True
 
-ALLOWED_HOSTS = ['vcnity.herokuapp.com','www.vcnity.online', '127.0.0.1']
+ALLOWED_HOSTS = ['vcnity.herokuapp.com','www.vcnity.online', '127.0.0.1', 'vcnity.online']
                     
