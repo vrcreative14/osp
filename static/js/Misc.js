@@ -10,21 +10,28 @@ function Login() {
          else{
              jsonBody = JSON.stringify({
                 "email":credInput,
-                "pw":pw
+                "pft":pw
             })
          }
     }
     else{
          jsonBody = JSON.stringify({
             "phone":credInput,
-            "password":pw
+            "pft":pw
         })
-    }
-    
+    }   
     
     postJSON('http://127.0.0.1:8000/api/login/', jsonBody)
 
 }
+
+// function logout() {
+//     tkl = window.getCookie('tkl')
+//     jsonBody = JSON.stringify({
+//         '' : 
+//     })
+// }
+
 
 function validateMobileno(enteredMobile) {
     debugger;
@@ -44,10 +51,8 @@ function validateMobileno(enteredMobile) {
     }
 }
 
-function validateEmail(email) {
+function validateEmail(email) {    
     
-    if(email === undefined || email ==='')
-        return
     var regex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     console.log(regex.test(String(email).toLowerCase()));
     
@@ -112,6 +117,108 @@ const postJSON = (url, jsonBody) => {
 
 }
 
+const postJSONAuth = (url, jsonBody) => {
+    let tkl = getCookie('tkl')
+    fetch(url,{ 
+        method : 'POST',
+        headers: {
+        'Accept': "application/json, text/plain, */*",
+        'Content-Type': 'application/json',     
+        'Accept-Encoding':'gzip,deflate,br',
+        'X-CSRFToken':csrftoken,
+        'Authorization' : 'token ' + tkl     
+        },
+        body: jsonBody
+    }
+  )
+        .then(response => {
+            if(!response.ok){
+            console.log(response)
+            response.text().then(text => {
+                DisplayMessage('','Some Error Occurred. Please try again after some time.', false)
+            })
+            // if(response.status == 400 || response.statusText == 'Bad Request'){
+            //     let msg = 'Email Id or Phone Number already exists'
+            //     document.getElementById('msg-heading').innerText = msg;            
+            //     document.getElementById('msg-heading').className = 'errormsg';
+            //     document.getElementById('msg-heading').style.display = 'block';
+            // }
+            //throw Error(response.statusText)
+            }
+            else{
+                 return response.json()
+                // console.log(response)
+                // let msg = 'You have been Registered Successfully'
+                // OpenMobileVerification()
+                //  document.getElementById('modalmsg').innerText = msg;            
+                //  document.getElementById('sellermodal').style.display = 'block';
+                //  document.getElementById('msg-heading').style.display = 'none';
+                //  if(mobile_no == ''){
+                //  document.getElementById('phoneVerification').display='none';
+                //  document.getElementById('phoneVerification').display='none';
+                //  }
+            }       
+        })
+        .then(data => {
+            console.log(data)
+            debugger
+            ShowResult(data);
+        })
+        .catch(error => console.log(error))
+
+}
+
+const postImage = (url, jsonBody) => {
+    let tkl = getCookie('tkl')
+    fetch(url,{ 
+        method : 'patch',
+        headers: {
+        'Accept': "*/*",
+        'Content-Type': 'application/json;multipart/form-data',     
+        'Accept-Encoding':'gzip,deflate,br',
+        'X-CSRFToken':csrftoken,
+        'Authorization' : 'token ' + tkl     
+        },
+        body: jsonBody
+    }
+  )
+        .then(response => {
+            if(!response.ok){
+            console.log(response)
+            response.text().then(text => {
+                DisplayMessage('','Some Error Occurred. Please try again after some time.', false)
+            })
+            // if(response.status == 400 || response.statusText == 'Bad Request'){
+            //     let msg = 'Email Id or Phone Number already exists'
+            //     document.getElementById('msg-heading').innerText = msg;            
+            //     document.getElementById('msg-heading').className = 'errormsg';
+            //     document.getElementById('msg-heading').style.display = 'block';
+            // }
+            //throw Error(response.statusText)
+            }
+            else{
+                 return response.json()
+                // console.log(response)
+                // let msg = 'You have been Registered Successfully'
+                // OpenMobileVerification()
+                //  document.getElementById('modalmsg').innerText = msg;            
+                //  document.getElementById('sellermodal').style.display = 'block';
+                //  document.getElementById('msg-heading').style.display = 'none';
+                //  if(mobile_no == ''){
+                //  document.getElementById('phoneVerification').display='none';
+                //  document.getElementById('phoneVerification').display='none';
+                //  }
+            }       
+        })
+        .then(data => {
+            console.log(data)
+            debugger
+            ShowResult(data);
+        })
+        .catch(error => console.log(error))
+
+}
+
 const ShowResult = (data) => {
     var detail = data.detail
         switch(data.detail){
@@ -130,17 +237,21 @@ const ShowResult = (data) => {
             case 'User registered successfully':
                 //DisplayMessage('Required Data missing',data.detail,data.status)
                 debugger
-                document.getElementById('otpVerificationDiv').style.display = 'none';    
-                $('.ui.modal').modal('show');
                 var pft = document.getElementById('password').value  
                 var mobile_no = document.getElementById('mobile_no').value
+                setCookie('user_ph',mobile_no)
+                debugger
+                document.getElementById('otpVerificationDiv').style.display = 'none';    
+                $('.ui.modal').modal('show');
+               
                 let jsonBody = JSON.stringify({
                     'phone': mobile_no,
-                    'pft':pft,
+                    'pft': pft,
                 })
                 postJSON('http://127.0.0.1:8000/api/login/', jsonBody)
                 debugger
-                setTimeout(() => {  window.open('/','_self') }, 2000);
+                setTimeout(() => { window.open('/','_self') }, 2000);
+                break;
 
             case 'OTP matched':
                // document.getElementById('otpmatchedIcon').style.display = 'inline';
@@ -162,6 +273,26 @@ const ShowResult = (data) => {
                 ProceedLogin(data)
                
                 break;
+            
+            case 'Store Successfully Created. Continue saving further information':
+                debugger
+                //openTab('taxInfo')
+                //document.getElementsByClassName('showMessage').style.display = 'block'
+                let img = document.getElementById('storeimage').value
+                var dict = {
+                    "storeimage" : img,
+                    "store": data.store
+                }
+                if(img == '' || img == undefined){
+                    //DisplayMessage('','Store Successfully Created. Now you are ready to list your products online and reach your customers.', true)
+                    OpenModalProceed('/SellerDashboard','Store Successfully Created. Now you are ready to list your products online and reach your customers.','Redirecting you to Dashboard')
+                    break;
+                }
+                postImage('http://127.0.0.1:8000/api/store/create/',JSON.stringify(dict))              
+                break;
+            case 'Image uploaded succcesfully':
+                DisplayMessage('','Store Successfully Created. Now you are ready to list your products online and reach your customers.', true)
+
             default: 
                 if(data.token !== undefined)   
                 ProceedLogin(data)
@@ -170,6 +301,13 @@ const ShowResult = (data) => {
         }
 }
 
+
+const OpenModalProceed = (pageurl,text,message) => {
+    $('.ui.modal').modal('show');
+    document.querySelector('.ui.modal > div > span').innerText = `${text}`
+    document.querySelector('.content > p').innerText = `${message}`
+    setTimeout(() => {  window.open(`${pageurl}`,'_self') }, 3000);
+}
 
 const ProceedLogin = (data) => {
   debugger
@@ -182,19 +320,25 @@ const ProceedLogin = (data) => {
 }
 
 const DisplayMessage = (heading,detail, status) =>{
-    if(status==true){        
-    document.querySelector('.showMessage').classList.remove('error') ;
-    document.querySelector('.showMessage').classList.add('success') ;
-    }
-    else{        
+    switch(status.toString()){
+     case 'true':
+        document.querySelector('.showMessage').classList.remove('error') ;
+        document.querySelector('.showMessage').classList.add('success') ;
+        break;
+    case 'false':
+        document.querySelector('.showMessage').classList.remove('success') ;
+        document.querySelector('.showMessage').classList.add('error') ;
+    case 'info':
     document.querySelector('.showMessage').classList.remove('success') ;
-    document.querySelector('.showMessage').classList.add('error') ;
+    document.querySelector('.showMessage').classList.remove('error') ;
+    document.querySelector('.showMessage').classList.add('info') ;
+
     }
+   
     document.querySelector('.showMessage').style.display='block'
     document.querySelector('.showMessage>div').innerText = heading
     document.querySelector('.showMessage>p').innerHTML = detail     
 }
-
 
 function setCookie(cname, cvalue, expires){
     var d = new Date();
@@ -220,7 +364,7 @@ function getCookie(cname) {
     return "";
   }
 
-  function checkCookie() {
+function checkCookie() {
     var username = getCookie("username");
     if (username != "") {
      alert("Welcome again " + username);
@@ -231,3 +375,4 @@ function getCookie(cname) {
       }
     }
   }
+

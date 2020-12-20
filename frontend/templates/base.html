@@ -44,14 +44,30 @@
       <input type="text" placeholder="Search...">
     <i class="circular search link icon" onclick="() => {console.log('Searching nearby stalls...')};"></i>
     </div> -->
-
+    <input type="hidden" id="isLocationEdited" value="0">
+    <input type="hidden" id="saveLocation" value="">
+    <input type="hidden" id="currentEvent" value="">
+    
     <div class="ui menu" style="margin-left: 52px;">
       <div class="item">
+        
     <div class="ui category search">
+      
       <div class="ui small icon input">
-        <input id="locationInput" class="prompt " type="text" style="width: 275px;" value="PIN 226004 Lucknow, Charbagh" readonly>   
-        <i class="location arrow icon"></i>
+        
+        <!-- <i class="location arrow icon link" onclick="() => {  }">Edit</i> -->
+        <i id="detectLocation" class="crosshairs icon link" onclick="FetchCitynPin(event)"></i>
+                 
+        <input id="locationCity" class="prompt " type="text" style="width: 200px;" value="Lucknow, Charbagh" placeholder="">    
+        <input id="locationPin" class="prompt " type="text" style="width: 130px;" value="208012" placeholder="">      
+        
+           
       </div>     
+      <!-- <span id="" class="ui black basic label">Pincode</span>     -->
+      <!-- <div class="ui small icon input">
+        
+        
+      </div> -->
     </div>
       </div>
 

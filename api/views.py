@@ -5,6 +5,7 @@ from accounts.models import User, UserOTP, PhoneOTP
 from .serializers import *
 from accounts.models import Seller
 from rest_framework.response import Response
+from django.http import  JsonResponse
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework import generics, status, views, permissions
@@ -28,6 +29,13 @@ import random
 import requests
 from rest_framework.decorators import permission_classes
 from rest_framework.permissions import IsAuthenticated
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
+from django.http import HttpResponse
+from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
+from stores.models import States
+from django.shortcuts import get_object_or_404
+
 
 # Create your views here.
 
@@ -49,7 +57,7 @@ def validate_phone_otp(phone, usr_first_name):
                 'detail':'Mobile number already exists'
             })
         else:
-            otp = send_otp(phone, usr_first_name)
+            otp = send_otp(phone)
             if otp:
                 otp = str(otp)
                 count = 0
@@ -202,43 +210,54 @@ class ValidatePhoneOTP(APIView):
             })
 
 
+@login_required(login_url='http://127.0.0.1:8000/login')
 @api_view(['POST'])
-def RegisterSeller(request):
-    sellerid = request.data.get("seller")
-    print(sellerid)
+def RegisterSeller(request):    
+    usr = request.data.get('user', False)
+    first_name = request.data.get('firstname', False)
+    middle_name = request.data.get('middlename', False)
+    last_name = request.data.get('lastname', False)
+    secondary_email = request.data.get('secondaryemail', False)
+    secondary_phone = request.data.get('secondarymobile', False)
+
     try:
-        usr = request.data.get('user')
-        usr_first_name = request.data.get('first_name')
-        print(usr)
-        phone_no = usr['phone']
+        user = request.data.get("user")        
+        Temp_data = {'user': usr, 'first_name' : first_name,'middle_name': middle_name,'last_name': last_name, 'secondary_email': secondary_email, 'secondary_phone': secondary_phone}
+      
     except:
-        phone_no = None
+       return Response({
+           'status': False,
+           'detail': 'Please provide User Data'
+       })
+   
 
-    if phone_no:
-        phone = str(phone_no)
-        validate_phone_otp(phone, usr_first_name)
-
-    serializer = SellerUserSerializer(data=request.data)
+    serializer = SellerSerializer(data=Temp_data)
     # user = UserSerializer()
     #try:
     if serializer.is_valid(raise_exception=ValueError):
             seller = serializer.save()
-            usr_otp = random.randint(100000, 999999)
-            print(seller.user)
-            UserOTP.objects.create(user = seller.user, otp = usr_otp)
-            msg = f"Hello {seller.first_name} \n Your OTP is {usr_otp} \n Thanks"
+            # usr_otp = random.randint(100000, 999999)
+            # print(seller.user)
+            # UserOTP.objects.create(user = seller.user, otp = usr_otp)
+            #msg = f"Hello {seller.first_name} \n Your OTP is {usr_otp} \n Thanks"
 
-            send_mail(
-                "Welcome to the world of Vykyoo - Verify Your Email",
-                msg,
-                settings.EMAIL_HOST_USER,
-                [seller.user.email],
-                fail_silently=False
-            )
+            # send_mail(
+            #     "Welcome to the world of Vykyoo - Verify Your Email",
+            #     msg,
+            #     settings.EMAIL_HOST_USER,
+            #     [seller.user.email],
+            #     fail_silently=False
+            # )
 
             # print('seller serializer data:',json.dump(serializer.data,4) )
             #serializer.create(validated_data=request.data)
-            return Response(serializer.data,status=status.HTTP_201_CREATED)              
+            resp =  Response({
+                'status': True,
+                'detail':'Seller registered successfully. Continue filling the Store Info.'
+            })
+            resp.set_cookie('seller', seller)
+            return resp
+            #return Response(serializer.data,status=status.HTTP_201_CREATED)              
     
     # except:
     #     e = sys.exc_info()[0]
@@ -246,6 +265,73 @@ def RegisterSeller(request):
     return Response(serializer.error_messages,
                         status=status.HTTP_400_BAD_REQUEST)
 
+
+
+# @login_required(login_url='http://127.0.0.1:8000/login')
+
+class RegisterStore(APIView):
+        permission_classes = [permissions.IsAuthenticated]
+        #parser_classes = [MultiPartParser]
+
+        def post(self, request, format = None):
+                user_ph = request.data.get('user_ph', '')
+                user = User.objects.get(phone = user_ph)
+                seller = Seller.objects.get(user = user.pk)
+                name = request.data.get('shopname', False)
+                state = request.data.get('state', False)
+                city = request.data.get('city', False)
+                pincode = request.data.get('pincode', False)
+                latitude = request.data.get('latitude', False)
+                longitude = request.data.get('longitude', False)
+               
+               # storeimage = request.data["storeimage"]
+
+                temp_data = {"seller": seller.pk, "name": name, "state": state, "city" : city, "pincode": pincode, "latitude": latitude, "longitude": longitude}
+
+                serializer = StoreSerializer(data= temp_data)
+                if serializer.is_valid():
+                   store = serializer.save()
+                   if store:
+                        address_line1 = request.data.get("address")
+                        landmark = request.data.get("landmark", "")
+                        is_gst_registered = request.data.get("is_gst_registered", False)
+                        gstin = request.data.get("gstin")
+
+                        details_data = {"store":store.pk, "address_line1": address_line1, "nearest_landmark": landmark,"is_gst_registered":is_gst_registered ,"gstin": gstin}
+                        serializer2 = StoreDetailsSerializer(data = details_data)
+                        if serializer2.is_valid():
+                            serializer2.save()
+                           
+                            return JsonResponse({
+                                'status': True,
+                                'detail': 'Store Successfully Created. Continue saving further information',
+                                'store' : store.pk
+                            })
+                else:
+                    error = serializer.errors
+                    return Response({
+                        'status': False,
+                        'detail': error
+                    })
+        
+        def patch(self, request):
+            pk = request.data["store"]
+            model = get_object_or_404(Store, pk=pk)
+            storeimage = request.data["storeimage"]
+            model.storeimage = storeimage
+            model.save()
+            return Response({
+                'status': True,
+                'detail': 'Image uploaded succcesfully'
+            })
+        #     temp_data = {"storeimage" : storeimage}
+        #     serializer = StoreSerializer(Store,data= temp_data, partial = True)
+
+        #     if serializer.is_valid():
+        #         serializer.save(update_fields=['storeimage'])
+        #         return Response(serializer.data)
+        # # return a meaningful error response
+        #     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 
@@ -275,10 +361,11 @@ class Register(APIView):
        
         if phone and password:
             phone = str(phone)
-            user_email = User.objects.filter(email__iexact = email)
-            if user_email.exists():
-                 return Response({'status': False,
-                 'detail': 'Email entered is already registered.Try with different Email OR <br/> <a href="/login">Login into existing account from here</a>'})
+            if email:
+                user_email = User.objects.filter(email__iexact = email)
+                if user_email.exists():
+                    return Response({'status': False,
+                    'detail': 'Email entered is already registered.Try with different Email OR <br/> <a href="/login">Login into existing account from here</a>'})
 
             user = User.objects.filter(phone__iexact = phone)
             if user.exists():
@@ -297,12 +384,17 @@ class Register(APIView):
                         user.save()                       
                         old.delete()
                         request.session['user_name'] = name
-                        request.session['phone'] = phone
-                        
-                        return Response({
+                        request.session['phone'] = phone                        
+                        resp = Response({
                             'status' : True, 
                             'detail' : 'User registered successfully'
                         })
+                        resp.set_cookie('user', user.pk)
+                        return resp
+                        # return Response({
+                        #     'status' : True, 
+                        #     'detail' : 'User registered successfully'
+                        # })
 
                     else:
                         return Response({
@@ -336,52 +428,52 @@ class Register(APIView):
 #                 })
 
 
-@login_required()
-@api_view(['POST'])
-def RegisterStore(request):
-    #authentication_classes = (TokenAuthentication,)
-    #permission_classes = (IsAuthenticated,)
-    user_id = request.data["seller"]
-    seller = Seller.objects.get(user = user_id)    
-    categories = StoreCategory.objects.filter(name = request.data["store_category"])
-    sub_categories = StoreSubcategory.objects.filter(name = request.data["store_subcategory"])
+# @login_required()
+# @api_view(['POST'])
+# def RegisterStore(request):
+#     #authentication_classes = (TokenAuthentication,)
+#     #permission_classes = (IsAuthenticated,)
+#     user_id = request.data["seller"]
+#     seller = Seller.objects.get(user = user_id)    
+#     categories = StoreCategory.objects.filter(name = request.data["store_category"])
+#     sub_categories = StoreSubcategory.objects.filter(name = request.data["store_subcategory"])
     
-    print(user_id)
-    print(categories)
-    print(sub_categories)
-    print(request.data)
-    print(seller)
-    print('*******') 
-    print(seller.id)
-    print('*******') 
-    store = Store.objects.create(
-        seller_id = seller.id,
-        name = request.data["name"],
-        state = request.data["state"],
-        city = request.data["city"],
-        pincode = request.data["pincode"]     
-    )
+#     print(user_id)
+#     print(categories)
+#     print(sub_categories)
+#     print(request.data)
+#     print(seller)
+#     print('*******') 
+#     print(seller.id)
+#     print('*******') 
+#     store = Store.objects.create(
+#         seller_id = seller.id,
+#         name = request.data["name"],
+#         state = request.data["state"],
+#         city = request.data["city"],
+#         pincode = request.data["pincode"]     
+#     )
 
-    for category in categories:
-        store.store_category.add(category)
+#     for category in categories:
+#         store.store_category.add(category)
 
-    for sub_category in sub_categories:
-        store.store_subcategory.add(sub_category)
-    print('*******')    
-    print(store)
-    print('*******')    
+#     for sub_category in sub_categories:
+#         store.store_subcategory.add(sub_category)
+#     print('*******')    
+#     print(store)
+#     print('*******')    
 
-    print(store.__dict__)
-    print(store.store_category)
-    serializer = StoreSerializer(data = store.__dict__)
-    if serializer.is_valid(raise_exception=ValueError):
+#     print(store.__dict__)
+#     print(store.store_category)
+#     serializer = StoreSerializer(data = store.__dict__)
+#     if serializer.is_valid(raise_exception=ValueError):
         
-        serializer.save()
-        print(serializer.data)
-        #serializer.create(validated_data=request.data)
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
-    return Response(serializer.error_messages,
-                        status=status.HTTP_400_BAD_REQUEST)
+#         serializer.save()
+#         print(serializer.data)
+#         #serializer.create(validated_data=request.data)
+#         return Response(serializer.data, status=status.HTTP_201_CREATED)
+#     return Response(serializer.error_messages,
+#                         status=status.HTTP_400_BAD_REQUEST)
 
 # @login_required()
 # @api_view(['GET'])
@@ -510,12 +602,7 @@ class LoginAPI(KnoxLoginView):
             login(request, user[0], backend='accounts.backends.PhoneBackend')
             b = super().post(request, format=None)  
             request.session['user_token'] = b.data
-            return b
-            # return Response({
-            #     'status' : True,
-            #     'detail' : 'Logged in Successfully',
-            #     'info' : b,
-            # })  
+            return b           
 
        
         except Exception as e:
@@ -548,9 +635,9 @@ class LoginAPI(KnoxLoginView):
 
 
 @api_view(['POST'])
-def storeCreate(request): 
+def AddStoreDetails(request): 
     permission_classes = (permissions.IsAuthenticated,)
-    serializer = StorSerializer(data=request.data)
+    serializer = StoreDetailsSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save()
     return Response(serializer.data)
@@ -575,3 +662,64 @@ def send_otp(phone):
         return otp_key
     else:
         return False
+
+
+def LoginHelper(request,password,phone=None, email=None):
+     try:            
+            login_data = {'phone': phone, 'pft': password}        
+            serializer = MobileNoLoginSerializer(data = login_data)       
+            serializer.is_valid(raise_exception = True)
+            print(serializer.is_valid)
+            user = serializer.validated_data['user']
+            if user[0].is_active == False:
+                    return Response({
+                    'status': False,
+                    'detail':'Please verify your Mobile number through OTP, before logging in.'
+                })
+            # if user.last_login is None :
+            #         #user.first_login = True
+            #         user.save()
+                
+            # elif user.first_login:
+            #     #user.first_login = False
+            #     user.save()
+            login(request, user[0], backend='accounts.backends.PhoneBackend')
+            b = super().post(request, format=None)  
+            request.session['user_token'] = b.data
+            return b
+            # return Response({
+            #     'status' : True,
+            #     'detail' : 'Logged in Successfully',
+            #     'info' : b,
+            # })  
+
+       
+     except Exception as e:
+            
+            if(not str(e.args[0]).find("Mobile number is not registered") == -1):
+                    return Response({
+                           'status' : False,
+                           'detail' : 'Entered Mobile number is not registered. <a style="font-size:15px;font-weight:300;" href="/SignUp"> New users Signup from here</a>',                          
+                            })
+
+            serializer = LoginSerializer(data = request.data)                           
+            serializer.is_valid(raise_exception = True)
+            print(serializer.is_valid)
+            user = serializer.validated_data['user']
+            if user[0].is_active == False:
+                return Response({
+                    'status': False,
+                    'detail':'Please verify your Email through OTP, before logging in.'
+                })
+
+            # if user.last_login is None :
+            #         #user.first_login = True
+            #         user.save()
+                
+            # elif user.first_login:
+            #     #user.first_login = False
+            #     user.save()
+            login(request, user[0], backend = 'django.contrib.auth.backends.ModelBackend')
+            return super().post(request, format=None)
+
+

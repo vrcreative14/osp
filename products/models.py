@@ -51,7 +51,7 @@ class Product(models.Model):
     class Meta:
         abstract = True
 
-class GarmentSubcategory(models.Model):
+class GarmentSubcategory (models.Model):
     name = models.CharField(max_length=50)
 
     class Meta:
@@ -124,8 +124,6 @@ class Inventory(models.Model):
     clothing = models.ManyToManyField(Garment)
     # jewellery = models.ManyToManyField()
 
-    
-    
 
 
 # class Cart(models.Model):
@@ -135,3 +133,4 @@ class Inventory(models.Model):
 
 
     
+

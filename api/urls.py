@@ -13,8 +13,8 @@ router.register('users', UserViewSet)
 urlpatterns = [
     path('', include(router.urls)),
     path('seller/register/', views.RegisterSeller, name='register-seller'),
-    path('store/create/', views.RegisterStore, name='create-store'),
-    path('store/add/', views.storeCreate, name='add-store'),
+    path('store/create/', views.RegisterStore.as_view(), name='create-store'),
+    path('store/details/', views.AddStoreDetails, name='add-storedetails'),
     path('auth/seller-list', views.GetSellers.as_view(), name='seller-list'),
     path('auth/user', views.GetUser.as_view(), name='get-user'),
     #path('auth/store-list', views.GetSellers, name='seller-list'),
