@@ -153,7 +153,7 @@ class ValidatePhoneSendOTP(APIView):
                             })
 
                 return Response({
-                    'status': True, 'detail': 'An SMS with an OTP(One Time Password) has been sent <br/> to your Mobile number'
+                    'status': True, 'detail': 'An SMS with an OTP(One Time Password) has been sent <br/> to your Mobile number','otp':''+ otp
                 })
         else:
             return Response({
