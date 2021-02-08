@@ -135,7 +135,7 @@ class RegisterSerializer(serializers.ModelSerializer):
 
 class LoginSerializer(serializers.Serializer):
     email = serializers.CharField()   
-    password = serializers.CharField(
+    pft = serializers.CharField(
         style={'input_type':'password'}, trim_whitespace = False
     )
 
