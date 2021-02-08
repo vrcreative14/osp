@@ -34,7 +34,7 @@ const SaveSellerInfo = () => {
     dict[list[i]] = document.getElementById(list[i]).value
   }
   jsonBody=JSON.stringify(dict)
-  postJSON('http://127.0.0.1:8000/api/seller/register/',jsonBody)
+  postJSON('http://www.vcnity.online/api/seller/register/',jsonBody)
   openTab('storeInfo')
   document.getElementsByClassName('showMessage').style.display = 'block'
 }
@@ -70,7 +70,7 @@ const SaveStoreInfo = () => {
    dict["isgstregistered"] = false
 
   jsonBody=JSON.stringify(dict)
-  postJSONAuth('http://127.0.0.1:8000/api/store/create/',jsonBody)
+  postJSONAuth('http://www.vcnity.online/api/store/create/',jsonBody)
 }
 
 
@@ -95,7 +95,7 @@ const SaveStoreDetails = () => {
     dict[list[i]] = document.getElementById(list[i]).value
   }
   jsonBody=JSON.stringify(dict)  
-  postJSON('http://127.0.0.1:8000/api/store/details/', jsonBody)
+  postJSON('http://www.vcnity.online/api/store/details/', jsonBody)
  
 }
 
