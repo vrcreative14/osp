@@ -9,12 +9,14 @@ from knox import views as knox_views
 
 router = routers.DefaultRouter()
 router.register('users', UserViewSet)
-
+router.register('clothing', views.GarmentViewSet, basename='garment')
 urlpatterns = [
     path('', include(router.urls)),
     path('seller/register/', views.RegisterSeller, name='register-seller'),
     path('store/create/', views.RegisterStore.as_view(), name='create-store'),
     path('store/details/', views.AddStoreDetails, name='add-storedetails'),
+    path('prod-det/add/', views.AddProductDetails.as_view(), name='add-prod-det'),
+    path('product/add/', views.AddProduct.as_view(), name='add-product'),
     path('auth/seller-list', views.GetSellers.as_view(), name='seller-list'),
     path('auth/user', views.GetUser.as_view(), name='get-user'),
     #path('auth/store-list', views.GetSellers, name='seller-list'),
@@ -28,5 +30,6 @@ urlpatterns = [
     re_path("^register/$", views.Register.as_view()),
     path("api/auth", include('knox.urls')),
     
+   #path('products/list/',views.GarmentViewSet, name='get-products')
    # path("api/auth/register",RegisterAPI.as_views()),
 ]
