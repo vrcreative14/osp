@@ -35,12 +35,12 @@ from django.http import HttpResponse
 from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
 from stores.models import States
 from django.shortcuts import get_object_or_404
-
+from rest_framework.decorators import parser_classes
+from products.models import *
 
 # Create your views here.
 
 #link = f'https://2factor.in/API/R1/?module=TRANS_SMS&apikey=d422a24f-24aa-11eb-83d4-0200cd936042&to={phone}&from='
-#link1 = f'https://2factor.in/API/R1/?module=TRANS_SMS&apikey=d422a24f-24aa-11eb-83d4-0200cd936042&to={phone}&from=ORIGST&templatename=MobileVerificationOTP&var1={first_name}&var2={user_otp}'
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -153,7 +153,7 @@ class ValidatePhoneSendOTP(APIView):
                             })
 
                 return Response({
-                    'status': True, 'detail': 'An SMS with an OTP(One Time Password) has been sent <br/> to your Mobile number','otp':''+ otp
+                    'status': True, 'detail': 'An SMS with an OTP(One Time Password) has been sent <br/> to your Mobile number'
                 })
         else:
             return Response({
@@ -300,8 +300,7 @@ class RegisterStore(APIView):
                         details_data = {"store":store.pk, "address_line1": address_line1, "nearest_landmark": landmark,"is_gst_registered":is_gst_registered ,"gstin": gstin}
                         serializer2 = StoreDetailsSerializer(data = details_data)
                         if serializer2.is_valid():
-                            serializer2.save()
-                           
+                            serializer2.save()                           
                             return JsonResponse({
                                 'status': True,
                                 'detail': 'Store Successfully Created. Continue saving further information',
@@ -323,7 +322,7 @@ class RegisterStore(APIView):
             return Response({
                 'status': True,
                 'detail': 'Image uploaded succcesfully'
-            })
+            }) 
         #     temp_data = {"storeimage" : storeimage}
         #     serializer = StoreSerializer(Store,data= temp_data, partial = True)
 
@@ -334,6 +333,75 @@ class RegisterStore(APIView):
         #     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+class AddProductDetails(APIView):
+        #permission_classes = [permissions.IsAuthenticated]
+        #parser_classes = [MultiPartParser]
+
+        def post(self, request, format = None):
+                # user_ph = request.data.get('user_ph', '')
+                # user = User.objects.get(phone = user_ph)
+                # seller = Seller.objects.get(user = user.pk)
+                # name = request.data.get('shopname', False)
+                # state = request.data.get('state', False)
+                # city = request.data.get('city', False)
+                # pincode = request.data.get('pincode', False)
+                # latitude = request.data.get('latitude', False)
+                # longitude = request.data.get('longitude', False)
+               
+               # storeimage = request.data["storeimage"]
+
+               #temp_data = {"seller": seller.pk, "name": name, "state": state, "city" : city, "pincode": pincode, "latitude": latitude, "longitude": longitude}
+
+                serializer = Prod_Details_Serializer(data= request.data)
+                if serializer.is_valid():
+                   prod = serializer.save()
+                   return Response({
+                       'status': True,
+                       'details': prod.id
+                   })
+                #    if prod:
+                #         address_line1 = request.data.get("address")
+                #         landmark = request.data.get("landmark", "")
+                #         is_gst_registered = request.data.get("is_gst_registered", False)
+                #         gstin = request.data.get("gstin")
+
+                #         details_data = {"store":store.pk, "address_line1": address_line1, "nearest_landmark": landmark,"is_gst_registered":is_gst_registered ,"gstin": gstin}
+                #         serializer2 = StoreDetailsSerializer(data = details_data)
+                #         if serializer2.is_valid():
+                #             serializer2.save()                           
+                #             return JsonResponse({
+                #                 'status': True,
+                #                 'detail': 'Store Successfully Created. Continue saving further information',
+                #                 'store' : store.pk
+                #             })
+                # else:
+                #     error = serializer.errors
+                #     return Response({
+                #         'status': False,
+                #         'detail': error
+                #     })
+        
+        def patch(self, request):
+            pk = request.data["store"]
+            model = get_object_or_404(Store, pk=pk)
+            storeimage = request.data["storeimage"]
+            model.storeimage = storeimage
+            model.save()
+            return Response({
+                'status': True,
+                'detail': 'Image uploaded succcesfully'
+            })
+
+
+class AddProduct(APIView):
+    def post(self, request, format = None):
+        serializer = Product_Serializer(data = request.data)
+        if(serializer.is_valid()):
+            prod = serializer.save()
+            return Response({
+                       'status': True,
+                       'details': prod.id
+                   })
 
 def RegisterUser(temp_data):
         try:
@@ -345,6 +413,10 @@ def RegisterUser(temp_data):
         
         except:
             return False
+
+# @api_view(["GET"])
+# def GetProducts(request):
+#     category = request.data.get
 
 
 
@@ -414,75 +486,6 @@ class Register(APIView):
                 'detail' : 'Either phone or password was not received '
             })
 
-
-# class RegisterSeller(generics.GenericAPIView):
-#       serializer_class = SellerSerializer
-
-#       def post(self, request, *args, **kwargs):
-#                 serializer = self.get_serializer(data=request.data)
-#                 serializer.is_valid(raise_exception=True)
-#                 user = serializer.save()
-#                 return Response({
-#                 "user": UserSerializer(user, context=self.get_serializer_context()).data,
-#                 "token": AuthToken.objects.create(user)
-#                 })
-
-
-# @login_required()
-# @api_view(['POST'])
-# def RegisterStore(request):
-#     #authentication_classes = (TokenAuthentication,)
-#     #permission_classes = (IsAuthenticated,)
-#     user_id = request.data["seller"]
-#     seller = Seller.objects.get(user = user_id)    
-#     categories = StoreCategory.objects.filter(name = request.data["store_category"])
-#     sub_categories = StoreSubcategory.objects.filter(name = request.data["store_subcategory"])
-    
-#     print(user_id)
-#     print(categories)
-#     print(sub_categories)
-#     print(request.data)
-#     print(seller)
-#     print('*******') 
-#     print(seller.id)
-#     print('*******') 
-#     store = Store.objects.create(
-#         seller_id = seller.id,
-#         name = request.data["name"],
-#         state = request.data["state"],
-#         city = request.data["city"],
-#         pincode = request.data["pincode"]     
-#     )
-
-#     for category in categories:
-#         store.store_category.add(category)
-
-#     for sub_category in sub_categories:
-#         store.store_subcategory.add(sub_category)
-#     print('*******')    
-#     print(store)
-#     print('*******')    
-
-#     print(store.__dict__)
-#     print(store.store_category)
-#     serializer = StoreSerializer(data = store.__dict__)
-#     if serializer.is_valid(raise_exception=ValueError):
-        
-#         serializer.save()
-#         print(serializer.data)
-#         #serializer.create(validated_data=request.data)
-#         return Response(serializer.data, status=status.HTTP_201_CREATED)
-#     return Response(serializer.error_messages,
-#                         status=status.HTTP_400_BAD_REQUEST)
-
-# @login_required()
-# @api_view(['GET'])
-# def GetSellers(request):
-#     permission_classes = (permissions.IsAuthenticated, )  
-#     #user_id = request.data["id"]
-#     seller = Seller.objects.all()   
-#     serializer=SellerSerializer(seller, many=True)
-#     return Response(serializer.data)
 
 
 
@@ -722,4 +725,51 @@ def LoginHelper(request,password,phone=None, email=None):
             login(request, user[0], backend = 'django.contrib.auth.backends.ModelBackend')
             return super().post(request, format=None)
 
+@api_view(['POST'])
+@parser_classes((MultiPartParser,))
+def handle_uploaded_image(request):
+    #process image
+    if not 'uploaded_media' in request.FILES:
+        return Response({'msg':'Photo missing.'},status.HTTP_400_BAD_REQUEST)
+    try:
+        img = Image.open(StringIO(request.FILES['uploaded_media'].read()))
+    except IOError:
+        return Response({'msg':'Bad image.'}, status.HTTP_400_BAD_REQUEST)
+
+    serializer = Product_Serializer(data = request.DATA)
+    if not serializer.is_valid():
+        return Response({'msg':serializer.errors}, status.HTTP_400_BAD_REQUEST)
+
+    clothing = Garment.create()
+
+
+@api_view(['GET'])
+def GetProducts(request):
+    products = Garment.objects.all()
+    Temp_data = []
+    for product in products:
+        print(product)     
+        dictionary = {'name':product.name, 'price' : product.price, 'category' : 'Men', 'store' : product.store}
+        Temp_data.append(dictionary)
+        #Temp_data.append(dictionary)
+        # Temp_data.update({'name' : product.name})
+        # Temp_data.update({'price' : product.price})
+        # Temp_data.update({'category' : 'Men'})
+        # Temp_data.update({'store' : product.store})          
+
+    
+    serializer = Garment_Serializer(data = Temp_data)
+    if serializer.is_valid():
+        return Response(serializer.data)
+    else:
+        return Response({'status': False, 'error': serializer.errors}) 
+
+
+class GarmentViewSet(viewsets.ModelViewSet):
+    queryset = Garment.objects.all()
+    serializer_class = Garment_Serializer
+
+class GarmentDetailsViewSet(viewsets.ModelViewSet):
+    queryset = GarmentDetails.objects.all()
+    serializer_class = GarmentDetailsSerializer
 
