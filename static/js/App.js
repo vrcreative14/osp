@@ -24,6 +24,7 @@ function getLocation() {
 function showPosition(position) {    
     debugger;
     //getLocation();
+  var loc = document.getElementById('save')  
   fetchLocationName(position);
   //l.placeholder = "Latitude: " + position.coords.latitude +
   //"<br>Longitude: " + position.coords.longitude;
@@ -55,6 +56,7 @@ function fetchLocationName(position){
            break;
         case 'detect-location':
             FillAddress(data.results[0])
+            break;
        default:
            break;
        }
@@ -234,6 +236,8 @@ window.onload = function(){
         headerLinks[i].classList.remove('hidden')
     }
 }
+debugger
+FetchCitynPin()
 }
 
 function getCookie(cname) {
@@ -255,6 +259,7 @@ function getCookie(cname) {
 
 function FetchCitynPin(event){
     document.getElementById('detectLocation').classList.add('loading')
+    if(!!event)
     document.getElementById('currentEvent').value = event.target.id
 
     debugger
@@ -271,6 +276,9 @@ function FetchCitynPin(event){
 }
 
 function FillCitynPin(data){
+    if (data == undefined || data==""){
+
+    }
     let pin = data["pincode"] 
     let city = data["city"]
     let area = data["subLocality"]
@@ -284,3 +292,5 @@ function ShowMessageBar() {
     x.className = "show";
     setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
   }
+
+  

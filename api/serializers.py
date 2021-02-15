@@ -5,6 +5,7 @@ from accounts.models import Seller
 from django.contrib.auth import authenticate
 from stores.models import Store,StoreDetails, StoreCategory, StoreSubcategory
 from django.contrib.auth import login
+from products.models import  *
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -135,18 +136,18 @@ class RegisterSerializer(serializers.ModelSerializer):
 
 class LoginSerializer(serializers.Serializer):
     email = serializers.CharField()   
-    password = serializers.CharField(
+    pft = serializers.CharField(
         style={'input_type':'password'}, trim_whitespace = False
     )
 
     def validate(self, attrs):
         print(attrs)
         email = attrs.get('email')      
-        password = attrs.get('pft')
+        pft = attrs.get('pft')
 
-        if email and password:
+        if email and pft:
             if User.objects.filter(email = email).exists():
-                print(email, password)
+                #print(email, password)
                 #user = authenticate (request = self.context.get('request'),email = email, password = password)
                 user = User.objects.filter(email = email)
             else:
@@ -207,7 +208,23 @@ class StoreDetailsSerializer(serializers.ModelSerializer):
         model = StoreDetails
         fields = '__all__'
 
+class Prod_Details_Serializer(serializers.ModelSerializer):
+    sizes_available = serializers.ListField()
+    class Meta:
+        model = Garment
+        fields = '__all__'
 
+class Product_Serializer(serializers.ModelSerializer):    
+    #details = Prod_Details_Serializer(required=True)
+    class Meta:
+        model = Garment
+        fields = ('name','img_path','brand_name','price','store','category','garment_details')
+    # def create(self, validated_data):
+    #     details_data = validated_data.pop('details')
+    #     details = Prod_Details_Serializer.create(Prod_Details_Serializer(), validated_data=details_data)
+    #     product, created = UnivStudent.objects.update_or_create(user=user,
+    #                         subject_major=validated_data.pop('subject_major'))
+    #     return student
 # # Login Serializer
 # class LoginSerializer(serializers.Serializer):
 #   username = serializers.CharField()
@@ -218,4 +235,16 @@ class StoreDetailsSerializer(serializers.ModelSerializer):
 #     if user and user.is_active:
 #       return user
 #     raise serializers.ValidationError("Incorrect Credentials")
+
+class Garment_Serializer(serializers.ModelSerializer):    
+    store = StoreSerializer(read_only=True ,many = True)
+    class Meta:
+        model = Garment
+        fields = ['name','image','img_path','brand_name','price','category','store']
+
+class GarmentDetailsSerializer(serializers.ModelSerializer):    
+    store = StoreSerializer(read_only=True ,many = True)
+    class Meta:
+        model = GarmentDetails
+        fields = ['garment','pockets_qty','description','neck_design','design_pattern','sizes_available']
 
