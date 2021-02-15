@@ -10,11 +10,7 @@ class Migration(migrations.Migration):
         ('products', '0001_initial'),
     ]
 
-    operations = [
-         migrations.RemoveField(
-           model_name='garment',
-            name='store',
-        ),
+    operations = [      
         migrations.RemoveField(
             model_name='garment',
             name='store',
