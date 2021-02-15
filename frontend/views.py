@@ -9,8 +9,10 @@ from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 import datetime
 from stores.models import States
-from products.models import  Garment
+from products.models import Garment
 from stores.models import ProductCategory, StoreCategory
+
+
 #from .forms import SellerForm
 #from api.models import Product
 # Create your views here.
@@ -123,3 +125,8 @@ def index(request):
         print(request.POST)
 
 
+@login_required(login_url='/login')
+def AddProducts(request):
+    categories = ProductCategory.objects.all()    
+    context = {'productcategories': categories}
+    return render(request,'frontend/AddProducts.html', context)

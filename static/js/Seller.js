@@ -94,9 +94,8 @@ const SaveStoreDetails = () => {
     //  array.push(a.value)    
     dict[list[i]] = document.getElementById(list[i]).value
   }
-  jsonBody=JSON.stringify(dict)  
+  jsonBody=JSON.stringify(dict)    
   postJSON('http://www.vcnity.online/api/store/details/', jsonBody)
- 
 }
 
 function FetchFillLocation(event){
@@ -140,7 +139,7 @@ const ValidateStoreInfo = () => {
     var listDup = ["shopname","state","city","pincode","productcategory", "storecategory", "isgstregistered","gstin"]
     const optionalList = ['address','latitude','longitude','storeimage']
     var index = 0
-    for(let i =0;i< list.length;i++){
+    for(let i =0;i < list.length;i++){
         let item = list[i]        
         if(item == 'isgstregistered'){           
             if(document.querySelector('input[name="isgstregistered"]:checked') == null){
@@ -170,8 +169,7 @@ const ValidateStoreInfo = () => {
           
        }
        else{
-        listDup.shift()  
-         
+        listDup.shift()           
        }
     }
     
@@ -198,7 +196,7 @@ return false;
 }
 
 const ValidateSellerInfo = () => {
-    const list = ["firstname","lastname","email","mobile" ]
+    const list = ["firstname","lastname","primaryemail","primarymobile" ]
     let count = 0
     for(let i =0;i< list.length;i++){
         let item = list[i]      
@@ -240,3 +238,4 @@ function OpenMessageBar(text) {
     bar.innerText = text
     setTimeout(function(){ bar.className = bar.className.replace("show", ""); }, 3000);
   }
+

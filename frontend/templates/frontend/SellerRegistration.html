@@ -81,7 +81,7 @@
                       </div>
 
                         <div class="">
-                          <input type="email" name="primaryemail" id="email" placeholder="Enter Your Email Id"  onchange="validateEmail()" maxlength="55" value="{{email}}">
+                          <input type="email" name="primaryemail" id="primaryemail" placeholder="Enter Your Email Id"  onchange="validateEmail()" maxlength="55" value="{{email}}">
                         </div>   
                     </div>
                     <div class="six wide field">
@@ -89,9 +89,9 @@
                         <label> Primary Mobile number </label>  
                         <span id="mobileerrorLabel" class="ui left pointing red basic label promptLabel" style="display: none;">Enter a valid Mobile number</span>                        
                        <div class="inline field">
-                        <input class="ui mini" style="width: 55px;margin-right: 0px;" placeholder="+91" readonly></input>   
-                        <input type="text" name="primarymobile" id="mobile" placeholder="Enter Your Primary Mobile number" onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))" maxlength="10" style="width: 265px;">
-                       </div>
+                          <input class="ui mini" style="width: 55px;margin-right: 0px;" placeholder="+91" readonly></input>   
+                          <input type="text" name="mobile" id="primarymobile" placeholder="Enter Your Primary Mobile number" onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))" maxlength="10" style="width: 265px;">
+                          </div>
                       </div>
                    
                   
@@ -135,8 +135,7 @@
                  <span class="formheadingSpan"> Shop & Organization Details </span>
                 </div>
                   <br/>
-                  <div class="fields">
-                  
+                  <div class="fields">                  
                     <div class="four wide required field">
                       <label class="">Enter Name of your Shop</label>                  
                       <input type="text" name="" placeholder="Shop/Store Name" id="shopname">
@@ -153,11 +152,9 @@
                       <!-- <option value="0" disabled>Select Product Categories you deal with</option>            -->
                       </select>
                       <span id="productcategoryerrorLabel" class="ui top pointing red basic label promptLabel" style="display: none;">Choose Product categories you deal with for store creation</span>             
-                    </div>                  
-
-                   
-
+                    </div>                                 
                   </div>
+
                   <div class="six wide field hidden"> 
                    <input type="text" class="largeInput " id="describe-category" placeholder="Describe the product category in which you deal. In case of multiple categories separate them with comma."></input>
                  </div>
@@ -303,11 +300,8 @@
                     </div>
           </div>
         
-          <div name="taxInfo" class="ui tab" data-tab="taxInfo">
-            
-            <form class="ui large form">
-              
-                  
+          <div name="taxInfo" class="ui tab" data-tab="taxInfo">            
+            <form class="ui large form">                               
                   </form>
                   tax info
           </div>
@@ -319,7 +313,7 @@
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.10/semantic.js"></script>
         <script>
             $('#storecategory').dropdown()            
-            $('#productcategory').dropdown()            
+            $('#productcategory').dropdown()        
         </script>
     {% endblock %}
 </body>

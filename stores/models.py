@@ -137,7 +137,7 @@ class Store(models.Model):
         ('Jharkhand', 'Jharkhand'),
         ('Karnataka', 'Karnataka'),
         ('Kerala', 'Kerala'),
-        ('Lakshadweep', 'Lakshadweep'),
+        ('Lakshwadweep', 'Lakshwadweep'),
         ('Madhya Pradesh', 'Madhya Pradesh'),
         ('Maharashtra', 'Maharashtra'),
         ('Manipur', 'Manipur'),
@@ -164,7 +164,7 @@ class Store(models.Model):
     longitude = models.CharField(max_length=20, default='80.9462° E')
     #owner_name = models.CharField(max_length=50)
     #email_id = models.EmailField(max_length=254)
-    store_manager = models.ForeignKey(StoreManager, on_delete=models.SET_DEFAULT,default=1, blank=True)
+    store_manager = models.ForeignKey(StoreManager, on_delete=models.SET_DEFAULT,default=1, blank=True, null=True)
     product_category = models.ManyToManyField(ProductCategory)
     store_category = models.ManyToManyField(StoreCategory)
     #store_subcategory = models.ManyToManyField(StoreSubcategory)

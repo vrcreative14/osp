@@ -25,13 +25,6 @@ function Login() {
 
 }
 
-// function logout() {
-//     tkl = window.getCookie('tkl')
-//     jsonBody = JSON.stringify({
-//         '' : 
-//     })
-// }
-
 
 function validateMobileno(enteredMobile) {
     debugger;
@@ -87,26 +80,9 @@ const postJSON = (url, jsonBody) => {
             response.text().then(text => {
                 DisplayMessage('','Some Error Occurred. Please try again after some time.', false)
             })
-            // if(response.status == 400 || response.statusText == 'Bad Request'){
-            //     let msg = 'Email Id or Phone Number already exists'
-            //     document.getElementById('msg-heading').innerText = msg;            
-            //     document.getElementById('msg-heading').className = 'errormsg';
-            //     document.getElementById('msg-heading').style.display = 'block';
-            // }
-            //throw Error(response.statusText)
             }
             else{
                  return response.json()
-                // console.log(response)
-                // let msg = 'You have been Registered Successfully'
-                // OpenMobileVerification()
-                //  document.getElementById('modalmsg').innerText = msg;            
-                //  document.getElementById('sellermodal').style.display = 'block';
-                //  document.getElementById('msg-heading').style.display = 'none';
-                //  if(mobile_no == ''){
-                //  document.getElementById('phoneVerification').display='none';
-                //  document.getElementById('phoneVerification').display='none';
-                //  }
             }       
         })
         .then(data => {
@@ -137,26 +113,10 @@ const postJSONAuth = (url, jsonBody) => {
             response.text().then(text => {
                 DisplayMessage('','Some Error Occurred. Please try again after some time.', false)
             })
-            // if(response.status == 400 || response.statusText == 'Bad Request'){
-            //     let msg = 'Email Id or Phone Number already exists'
-            //     document.getElementById('msg-heading').innerText = msg;            
-            //     document.getElementById('msg-heading').className = 'errormsg';
-            //     document.getElementById('msg-heading').style.display = 'block';
-            // }
-            //throw Error(response.statusText)
+           
             }
             else{
-                 return response.json()
-                // console.log(response)
-                // let msg = 'You have been Registered Successfully'
-                // OpenMobileVerification()
-                //  document.getElementById('modalmsg').innerText = msg;            
-                //  document.getElementById('sellermodal').style.display = 'block';
-                //  document.getElementById('msg-heading').style.display = 'none';
-                //  if(mobile_no == ''){
-                //  document.getElementById('phoneVerification').display='none';
-                //  document.getElementById('phoneVerification').display='none';
-                //  }
+                 return response.json()                
             }       
         })
         .then(data => {
@@ -165,7 +125,6 @@ const postJSONAuth = (url, jsonBody) => {
             ShowResult(data);
         })
         .catch(error => console.log(error))
-
 }
 
 const postImage = (url, jsonBody) => {
@@ -188,26 +147,9 @@ const postImage = (url, jsonBody) => {
             response.text().then(text => {
                 DisplayMessage('','Some Error Occurred. Please try again after some time.', false)
             })
-            // if(response.status == 400 || response.statusText == 'Bad Request'){
-            //     let msg = 'Email Id or Phone Number already exists'
-            //     document.getElementById('msg-heading').innerText = msg;            
-            //     document.getElementById('msg-heading').className = 'errormsg';
-            //     document.getElementById('msg-heading').style.display = 'block';
-            // }
-            //throw Error(response.statusText)
             }
             else{
                  return response.json()
-                // console.log(response)
-                // let msg = 'You have been Registered Successfully'
-                // OpenMobileVerification()
-                //  document.getElementById('modalmsg').innerText = msg;            
-                //  document.getElementById('sellermodal').style.display = 'block';
-                //  document.getElementById('msg-heading').style.display = 'none';
-                //  if(mobile_no == ''){
-                //  document.getElementById('phoneVerification').display='none';
-                //  document.getElementById('phoneVerification').display='none';
-                //  }
             }       
         })
         .then(data => {
@@ -297,7 +239,6 @@ const ShowResult = (data) => {
                 if(data.token !== undefined)   
                 ProceedLogin(data)
                 DisplayMessage('',data.detail,data.status)
-
         }
 }
 

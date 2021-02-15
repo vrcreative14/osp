@@ -156,13 +156,25 @@ STATICFILES_DIRS = [
    os.path.join(BASE_DIR, 'static')
 ]
 
-MEDIA_URL = '/images/'
+#MEDIA_URL = '/images/'
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static')
 ]
 
-MEDIA_ROOT = os.path.join(BASE_DIR, 'static/images')
+from google.oauth2 import service_account
+GS_CREDENTIALS = service_account.Credentials.from_service_account_file(os.path.join(BASE_DIR,'credential.json'))
+
+DEFAULT_FILE_STORAGE = "OriginalStores.gcloud.GoogleCloudMediaFileStorage"
+GS_PROJECT_ID = 'vicinity-solutions'
+# GS_BUCKET_NAME = 'vicinity-stores'
+GS_BUCKET_NAME = 'vicinity-solutions.appspot.com'
+MEDIA_ROOT = "media/"
+UPLOAD_ROOT = 'media/uploads/'
+MEDIA_URL = 'https://storage.googleapis.com/{}/'.format(GS_BUCKET_NAME)
+
+#STATICFILES_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
+#MEDIA_ROOT = os.path.join(BASE_DIR, 'static/images')
 
 REST_FRAMEWORK = {    
     # 'DEFAULT_AUTHENTICATION_CLASSES': (        
