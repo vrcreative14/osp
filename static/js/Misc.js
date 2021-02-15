@@ -21,7 +21,7 @@ function Login() {
         })
     }   
     
-    postJSON('http://127.0.0.1:8000/api/login/', jsonBody)
+    postJSON('http://www.vcnity.online/api/login/', jsonBody)
 
 }
 
@@ -190,7 +190,7 @@ const ShowResult = (data) => {
                     'phone': mobile_no,
                     'pft': pft,
                 })
-                postJSON('http://127.0.0.1:8000/api/login/', jsonBody)
+                postJSON('http://www.vcnity.online/api/login/', jsonBody)
                 debugger
                 setTimeout(() => { window.open('/','_self') }, 2000);
                 break;
@@ -230,7 +230,7 @@ const ShowResult = (data) => {
                     OpenModalProceed('/SellerDashboard','Store Successfully Created. Now you are ready to list your products online and reach your customers.','Redirecting you to Dashboard')
                     break;
                 }
-                postImage('http://127.0.0.1:8000/api/store/create/',JSON.stringify(dict))              
+                postImage('http://www.vcnity.online/api/store/create/',JSON.stringify(dict))              
                 break;
             case 'Image uploaded succcesfully':
                 DisplayMessage('','Store Successfully Created. Now you are ready to list your products online and reach your customers.', true)

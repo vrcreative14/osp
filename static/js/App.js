@@ -86,7 +86,7 @@ function fetchStores() {
 var wrapper = document.getElementById('storeListDiv')
 //wrapper.innerHTML=''
  console.log('fetching....')
-  fetch('http://127.0.0.1:8000/api/store-list/', {
+  fetch('http://www.vcnity.online/api/store-list/', {
       method:'GET',              
   })
   .then(response => response.json())
@@ -293,4 +293,3 @@ function ShowMessageBar() {
     setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
   }
 
-  
