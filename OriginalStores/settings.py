@@ -208,5 +208,5 @@ EMAIL_HOST_USER = 'vcreative14@gmailcom'
 EMAIL_HOST_PASSWORD = 'Sona@1960'
 EMAIL_USE_TLS = True
 
-ALLOWED_HOSTS = ['vcnity.herokuapp.com','www.vcnity.online', '127.0.0.1', 'vcnity.online']
+ALLOWED_HOSTS = ['vcinity.herokuapp.com','www.vcnity.online', '127.0.0.1', 'vcnity.online']
                     
