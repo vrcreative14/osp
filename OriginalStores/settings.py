@@ -98,9 +98,9 @@ DATABASES = {
      'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'Original_Stores',
-        'USER' : 'xaateoxoovrgmo',
-        'PASSWORD' : '38d888d969d6bf26eb53cded4db5269937760d0266001556a1553c6a2e676f00',
-        'HOST': 'ec2-54-155-87-214.eu-west-1.compute.amazonaws.com',  
+        'USER' : 'sefpclnhqedars',
+        'PASSWORD' : '9612b43a8d72f0d9d8fa307ed5a2cc39e71b2bf11e2740f9cca8d66331f476ec',
+        'HOST': 'ec2-34-203-155-237.compute-1.amazonaws.com',  
         'PORT':'5432',
     }
 }
