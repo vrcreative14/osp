@@ -98,9 +98,9 @@ DATABASES = {
      'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'Original_Stores',
-        'USER' : 'postgres',
-        'PASSWORD' : 'aviral',
-        'HOST': '127.0.0.1',  
+        'USER' : 'sefpclnhqedars',
+        'PASSWORD' : '9612b43a8d72f0d9d8fa307ed5a2cc39e71b2bf11e2740f9cca8d66331f476ec',
+        'HOST': 'ec2-34-203-155-237.compute-1.amazonaws.com',  
         'PORT':'5432',
     }
 }
@@ -208,5 +208,5 @@ EMAIL_HOST_USER = 'vcreative14@gmailcom'
 EMAIL_HOST_PASSWORD = 'Sona@1960'
 EMAIL_USE_TLS = True
 
-ALLOWED_HOSTS = ['vcinity.herokuapp.com','www.vcnity.online', '127.0.0.1', 'vcnity.online']
+ALLOWED_HOSTS = ['vcnityonline.herokuapp.com','www.vcnity.online', '127.0.0.1', 'vcnity.online']
                     
