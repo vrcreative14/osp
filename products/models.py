@@ -7,7 +7,7 @@ import io
 from django.core.files.base import ContentFile
 import qrcode
 import random
-import pyqrcode
+# import pyqrcode
 # Create your models here.
 
 
