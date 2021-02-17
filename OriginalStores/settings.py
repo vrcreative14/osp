@@ -176,7 +176,10 @@ MEDIA_URL = 'https://storage.googleapis.com/{}/'.format(GS_BUCKET_NAME)
 #STATICFILES_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
 #MEDIA_ROOT = os.path.join(BASE_DIR, 'static/images')
 
-REST_FRAMEWORK = {    
+REST_FRAMEWORK = {
+     'DEFAULT_RENDERER_CLASSES': (
+        'rest_framework.renderers.JSONRenderer',
+    )    
     # 'DEFAULT_AUTHENTICATION_CLASSES': (        
     #     'rest_framework_simplejwt.authentication.JWTAuthentication',
     # ),
