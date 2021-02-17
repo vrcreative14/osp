@@ -24,7 +24,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '^c9#co+_4ff%8)k3t6+a99c+qm=_s26x((wzfp$(%a0(@eg*_b'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 
 
@@ -179,7 +179,7 @@ MEDIA_URL = 'https://storage.googleapis.com/{}/'.format(GS_BUCKET_NAME)
 REST_FRAMEWORK = {
      'DEFAULT_RENDERER_CLASSES': (
         'rest_framework.renderers.JSONRenderer',
-    )    
+    ),   
     # 'DEFAULT_AUTHENTICATION_CLASSES': (        
     #     'rest_framework_simplejwt.authentication.JWTAuthentication',
     # ),
@@ -190,7 +190,7 @@ REST_FRAMEWORK = {
     # ],
     # 'USER_DETAILS_SERIALIZER': 'userapp.serializer.UserDetailsSerializer'
      'DEFAULT_AUTHENTICATION_CLASSES': ('knox.auth.TokenAuthentication',),
-}
+}   
 
 from datetime import timedelta
 
