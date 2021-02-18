@@ -50,7 +50,7 @@ const SaveStoreInfo = () => {
     if (status == false)
       return
 
-    const list = ["shopname","state","city","pincode","latitude","longitude","productcategory", "storecategory",  "address", "landmark", "gstin"]
+    const list = ["shopname","state","city","pincode","latitude","longitude","productcategory", "store-category",  "address", "landmark", "gstin"]
     debugger
     var user = getCookie('user_ph')
   
