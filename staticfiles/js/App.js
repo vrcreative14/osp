@@ -30,6 +30,7 @@ function showPosition(position) {
   //"<br>Longitude: " + position.coords.longitude;
   document.getElementById('latitude').value = position.coords.latitude
   document.getElementById('longitude').value = position.coords.longitude
+  setCookie('geoloc',position.coords.latitude + '@' + position.coords.longitude)
 }
 
 function fetchLocationName(position){
@@ -204,7 +205,6 @@ if (a !== null)
     document.querySelector('.ui.tab.active').classList.remove('active');
 
 document.querySelector(`[name=${CSS.escape(tabName)}]`).classList.add('active');
-
 }
 
 
@@ -237,7 +237,10 @@ window.onload = function(){
     }
 }
 debugger
-FetchCitynPin()
+// if(getCookie('geoloc') == ""){
+// FetchCitynPin()
+// }
+
 }
 
 function getCookie(cname) {
@@ -292,4 +295,13 @@ function ShowMessageBar() {
     x.className = "show";
     setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
   }
+
+
+  function setCookie(cname, cvalue, expires){
+    var d = new Date();
+    var t = new Date(Date.parse(expires));
+   // d.setTime(parseInt(d.getTime() + (t.getTime() * 24*60*60*1000)));
+    var expires = "expires=" + t.toUTCString();
+    document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+}
 

@@ -1,6 +1,6 @@
 
 function checkGSTIN(gstin){
-var regex="\d{2}[A-Z]{5}\d{4}[A-Z]{1}[A-Z\d]{1}[Z]{1}[A-Z\d]{1}"
+var regex='\d{2}[A-Z]{5}\d{4}[A-Z]{1}[A-Z\d]{1}[Z]{1}[A-Z\d]{1}'
 if( regex.test(String(gstin))){
     return true
 }
