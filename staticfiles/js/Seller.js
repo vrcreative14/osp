@@ -135,7 +135,7 @@ function CheckProductCategory(){
 }
 
 const ValidateStoreInfo = () => {
-    const list = ["shopname","state","city","pincode","productcategory", "storecategory", "isgstregistered","gstin"]
+    const list = ["shopname","state","city","pincode","productcategory", "store-category", "isgstregistered","gstin"]
     var listDup = ["shopname","state","city","pincode","productcategory", "storecategory", "isgstregistered","gstin"]
     const optionalList = ['address','latitude','longitude','storeimage']
     var index = 0
