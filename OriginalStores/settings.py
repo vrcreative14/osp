@@ -97,9 +97,9 @@ DATABASES = {
     # }
      'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'vcnityonline_test',
+        'NAME': '',
         'USER' : 'postgres',
-        'PASSWORD' : 'aviral',
+        'PASSWORD' : '',
         'HOST': 'localhost',  
         'PORT':'5432',
     }
@@ -165,16 +165,10 @@ STATICFILES_DIRS = [
 from google.oauth2 import service_account
 GS_CREDENTIALS = service_account.Credentials.from_service_account_file(os.path.join(BASE_DIR,'credential.json'))
 
-DEFAULT_FILE_STORAGE = "OriginalStores.gcloud.GoogleCloudMediaFileStorage"
-GS_PROJECT_ID = 'vicinity-solutions'
-# GS_BUCKET_NAME = 'vicinity-stores'
-GS_BUCKET_NAME = 'vicinity-solutions.appspot.com'
-MEDIA_ROOT = "media/"
-UPLOAD_ROOT = 'media/uploads/'
-MEDIA_URL = 'https://storage.googleapis.com/{}/'.format(GS_BUCKET_NAME)
 
-#STATICFILES_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
-#MEDIA_ROOT = os.path.join(BASE_DIR, 'static/images')
+
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'static/images')
 
 REST_FRAMEWORK = {
      'DEFAULT_RENDERER_CLASSES': (
@@ -207,9 +201,8 @@ AUTHENTICATION_BACKENDS = (
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
-EMAIL_HOST_USER = 'vcreative14@gmailcom'
-EMAIL_HOST_PASSWORD = 'Sona@1960'
+
 EMAIL_USE_TLS = True
 
-ALLOWED_HOSTS = ['vcnityonline.herokuapp.com','www.vcnity.online', '127.0.0.1', 'vcnity.online']
+ALLOWED_HOSTS = ['127.0.0.1']
                     
